@@ -1,0 +1,2 @@
+Didn't think it was a good idea to upload the entire dataset to git.
+This is a placeholder in order to still upload the folder structure.
