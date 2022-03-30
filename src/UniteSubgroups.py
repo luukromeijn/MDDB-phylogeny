@@ -85,11 +85,43 @@ class UniteSubgroups:
                     if order == 'unidentified':
                         continue
                     # Add subgroup data to chunks
-                    name = phylum + '_' + classs + '_' + order
                     chunk = self.get_subgroup_data(phylum, classs, order)
+                    name = str(len(chunk)) + '_' + phylum + '_' + classs + '_' + order
                     chunks[name] = chunk
         
         self.chunks = chunks
+        return chunks
+
+
+    def split_on_threshold(self, max_chunk_size: int) -> dict:
+        '''Divides data into chunks with maximal size below threshold'''
+
+        self.check_requirements(taxon=True)
+        chunks = self.split_on_threshold_recursive(self.taxon_tree, max_chunk_size)
+
+        self.chunks = chunks
+        return chunks
+            
+
+    def split_on_threshold_recursive(self, tree: dict, max_chunk_size: int, *args: str) -> dict:
+        '''Returns chunks with maximal size below threshold from tree'''
+
+        chunks = {}
+        for rank in tree: # Loop through child nodes of tree
+            if rank == 'unidentified': # Skip if unidentified
+                continue
+            chunk = self.get_subgroup_data(*args, rank)
+            # Add chunk if threshold is passed or max tree depth is reached
+            if len(chunk) < max_chunk_size or len(args) == 5:
+                name = str(len(chunk))
+                for arg in args:
+                    name += '_' + arg
+                name += '_' + rank
+                chunks[name] = chunk
+                continue
+            else: # If not, call recursion and add that data to chunks
+                chunks = {**chunks, **self.split_on_threshold_recursive(tree[rank], max_chunk_size, *args, rank)}
+
         return chunks
 
     
@@ -109,7 +141,7 @@ class UniteSubgroups:
         print("Size (std):", np.std(sizes))
         print("Size (min):", np.min(sizes))
         print("Size (max):", np.max(sizes))
-        print("Sizes:\n", sizes)
+        # print("Sizes:\n", sizes)
 
     
     def chunks_to_fasta(self):
