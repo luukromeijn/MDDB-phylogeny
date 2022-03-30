@@ -1,0 +1,6 @@
+The analysis was run using raxmlGUI 2.0 (version 2.0.7) as follows:
+Analysis: ML + rapid bootstrap
+Binary: raxmlHPC-PTHREADS-SSE3.exe version 8.2.12
+Results saved to: C:\Users\luukr\Downloads\Delete soon\delete sooner
+RAxML was called with these arguments:
+1.) -T 2 -f a -x 510523 -p 510523 -N 100 -m GTRGAMMA -O -n 104_Ascomycota_Sordariomycetes_Coniochaetales_aligned.tre -s "C:\Users\luukr\Documents\Nieuwe map\mafft-7.490-win64-signed\mafft-win\104_Ascomycota_Sordariomycetes_Coniochaetales_aligned_modified.fasta" -w "C:\Users\luukr\Downloads\Delete soon\delete sooner"

@@ -7,6 +7,7 @@ class UniteSubgroups:
 
     def __init__(self):
         self.sequences = None
+        self.taxonomies = None
         self.taxon_tree = None
         self.chunks = None
 
@@ -40,6 +41,7 @@ class UniteSubgroups:
         '''Returns and sets dict representation of taxon data'''
         data = open(path)
         data = data.readlines()
+        taxonomies = []
         taxon_tree = {}
 
         for n in range(len(data)): # Iterate through the file
@@ -47,8 +49,10 @@ class UniteSubgroups:
             sh = record[0][:-9] # Remove whitespace
             record[6] = record[6][:-1] # Remove newline
             view_level = taxon_tree # How 'deep' we look in the tree, initialized at full tree
+            taxonomy = ''
             for i in range(1,len(record)): # Loop through ranks
                 rank = record[i][3:] # Remove headers
+                taxonomy += rank + '_'
                 # Add to current view if unidentified or deepest level reached
                 if rank == 'unidentified' or i == 6: # Also append index for easy seq retrieval
                     view_level.setdefault(rank, []).append((n,sh))
@@ -57,8 +61,10 @@ class UniteSubgroups:
                 else:
                     view_level.setdefault(rank, {})
                     view_level = view_level[rank]
+            taxonomies.append(taxonomy[:-1])
 
         self.taxon_tree = taxon_tree
+        self.taxonomies = taxonomies
         return self.taxon_tree
 
 
@@ -144,8 +150,9 @@ class UniteSubgroups:
         # print("Sizes:\n", sizes)
 
     
-    def chunks_to_fasta(self):
-        '''Creates fasta file with seq data for each chunk'''
+    def chunks_to_fasta(self, taxonomy=False):
+        '''Creates fasta file with seq data for each chunk.
+        Taxonomy==True will include taxonomy in fasta headers.'''
 
         self.check_requirements(fasta=True, chunks=True)
 
@@ -154,13 +161,19 @@ class UniteSubgroups:
             seqs = []
             for sh in shs:
                 index = sh[0]
-                seqs.append(self.sequences[index])
-            SeqIO.write(seqs, "results/" + name + ".fasta", "fasta")
+                if taxonomy:
+                    sequence = self.get_seq_tax(index, exclude_tax=name, exclude_size=str(len(shs))+'_')
+                else:
+                    sequence = self.sequences[index]
+                seqs.append(sequence)
+            SeqIO.write(seqs, "results/chunks/" + name + ".fasta", "fasta")
         
 
     def get_subgroup_data(self, *args: str) -> 'list[str]':
         '''Returns list of data corresponding to subgroup of tree.
         Arguments should be taxon rank names (ordered).'''
+
+        self.check_requirements(taxon=True)
         tree = self.taxon_tree
         for rank in args: # Identify subtree
             try:
@@ -184,3 +197,19 @@ class UniteSubgroups:
             for rank in tree:
                 shs += self.get_tree_data(tree[rank])
             return shs
+
+
+    def get_seq_tax(self, index: int, exclude_tax: str='', exclude_size: str=''):
+        '''Returns sequence and taxonomy based on index'''
+
+        self.check_requirements(fasta=True, taxon=True)
+        sequence = self.sequences[index]
+        taxonomy = exclude_size + self.taxonomies[index]
+        taxonomy = taxonomy.replace(exclude_tax, '')
+        if taxonomy[0] == '_':
+            taxonomy = taxonomy[1:]
+        sequence.id = taxonomy
+        sequence.description = taxonomy
+
+        return sequence
+        
