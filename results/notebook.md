@@ -33,6 +33,6 @@ Since it was unsure whether the produced tree was valid, the `chunks_to_fasta` m
 
 We then ran MAFFT and RAxmL again with a chunk of size 104. This took 0.22 hours. It was still hard to say whether the tree was valid since the taxonomy information is too long to be shown in the plot produced by `PlotTree.py`. However, when zooming in we did observe two seemingly correct clusters (Lecytophora and unidentified). 
 
-![Lecytophora cluster](/30-3-2022/lecythophora.png)
+![Lecytophora cluster](30-3-2022\lecythophora.png)
 
-![Unidentified cluster](/30-3-2022/unidentified.png)
+![Unidentified cluster](30-3-2022/unidentified.png)
