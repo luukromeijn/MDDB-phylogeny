@@ -5,5 +5,5 @@ By Casper Carton and Luuk Romeijn.
 Supervisors:
 * Dr. V. Merckx (Naturalis)
 * Dr. R. Vos (Naturalis)
-* I. Martirelli MSc (LIACS)
+* I. Martorelli MSc (LIACS)
 * Prof. F. Verbeek (LIACS)
