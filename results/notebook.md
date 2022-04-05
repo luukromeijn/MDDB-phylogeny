@@ -36,3 +36,19 @@ We then ran MAFFT and RAxmL again with a chunk of size 104. This took 0.22 hours
 ![Lecytophora cluster](30-3-2022/lecythophora.png)
 
 ![Unidentified cluster](30-3-2022/unidentified.png)
+
+# 5-4-2022
+Replaced splitting methods with generalized `split` method, which will split into chunks until a certain `min_depth` is reached. After this `min_depth`, chunks that are bigger than the `max_size` (if specified) will be splitted up further until the `max_depth` is also reached. See below the chunk size report for `min_depth=3` (order), `max_depth=4` (family), and `max_size=1500`.
+
+    ---- CHUNK SIZE REPORT ----
+    Number: 463
+    Size (avg): 110.09935205183585
+    Size (std): 274.2335851854047
+    Size (min): 1
+    Size (max): 3052
+
+Also see the distribution of the resulting chunk sizes below (compared to splitting on order only)
+
+![Chunk size distribution](5-4-2022/Chunksizedistribution.png)
+
+This method of splitting up based on order and only making an extra split on family is the exact method as proposed by Vincent and Rutger. With the generalized implementation, this would allow us to do a more structured experiment with the different chunk sizes to see what's best. Or maybe just go with the one described above since the results seem pretty ok.

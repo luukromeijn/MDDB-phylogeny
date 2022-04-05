@@ -75,58 +75,48 @@ class UniteSubgroups:
             json.dump(self.taxon_tree, outfile)
 
 
-    def split_on_order(self) -> list:
-        '''Divides data into chunks based on order'''
+    def split(self, min_depth: int, max_depth: int=None, max_size: int=None) -> dict:
+        '''Divides data into subgroups based on level in taxonomy rank.
+        Splits on min_depth level, except for chunks bigger than max_size. 
+        Those are splitted up further until max_depth level.'''
 
-        self.check_requirements(taxon=True)
+        # Some checks
+        max_depth = max_depth if max_depth is not None else min_depth
+        self.check_requirements(taxon=True) 
+        if min_depth > max_depth:
+            raise ValueError("max_depth should be more than min_depth")
+        if min_depth < 1: 
+            raise ValueError("Depth should be at least 1 for splitting.")
+        if max_depth > 6:
+            raise ValueError("Cannot split further than species level.")
 
-        chunks = {}
-        for phylum in self.taxon_tree: # Loop through taxonomy ranks
-            if phylum == 'unidentified': # Skip if unidentified
-                continue
-            for classs in self.taxon_tree[phylum]:
-                if classs == 'unidentified':
-                    continue
-                for order in self.taxon_tree[phylum][classs]:
-                    if order == 'unidentified':
-                        continue
-                    # Add subgroup data to chunks
-                    chunk = self.get_subgroup_data(phylum, classs, order)
-                    name = str(len(chunk)) + '_' + phylum + '_' + classs + '_' + order
-                    chunks[name] = chunk
-        
+        # Calling the recursive function
+        chunks = self.split_recursive(self.taxon_tree, min_depth-1, max_depth-1, max_size=max_size)
         self.chunks = chunks
         return chunks
 
-
-    def split_on_threshold(self, max_chunk_size: int) -> dict:
-        '''Divides data into chunks with maximal size below threshold'''
-
-        self.check_requirements(taxon=True)
-        chunks = self.split_on_threshold_recursive(self.taxon_tree, max_chunk_size)
-
-        self.chunks = chunks
-        return chunks
-            
-
-    def split_on_threshold_recursive(self, tree: dict, max_chunk_size: int, *args: str) -> dict:
-        '''Returns chunks with maximal size below threshold from tree'''
+    
+    def split_recursive(self, tree: dict, min_depth: int, max_depth, *args: str, max_size: int=None) -> dict:
+        '''Divides (sub)tree into subgroups until depth==0.
+        If chunk size exceeds max_size, split further until max_depth.
+        *args: list of taxonomic rank corresponding to current subtree.'''
 
         chunks = {}
         for rank in tree: # Loop through child nodes of tree
             if rank == 'unidentified': # Skip if unidentified
                 continue
-            chunk = self.get_subgroup_data(*args, rank)
-            # Add chunk if threshold is passed or max tree depth is reached
-            if len(chunk) < max_chunk_size or len(args) == 5:
-                name = str(len(chunk))
-                for arg in args:
-                    name += '_' + arg
-                name += '_' + rank
-                chunks[name] = chunk
-                continue
-            else: # If not, call recursion and add that data to chunks
-                chunks = {**chunks, **self.split_on_threshold_recursive(tree[rank], max_chunk_size, *args, rank)}
+            chunk = self.get_subgroup_data(*args, rank) # Get the data
+            if min_depth > 0: # Search further into tree if min depth not reached
+                chunks = {**chunks, **self.split_recursive(tree[rank], min_depth-1, max_depth-1, *args, rank, max_size=max_size)}
+            else:
+                if max_size is not None and len(chunk) > max_size and max_depth > 0: # Search deeper if max_size exceeded and max_depth is not
+                    chunks = {**chunks, **self.split_recursive(tree[rank], min_depth-1, max_depth-1, *args, rank, max_size=max_size)}
+                else: # If not or not provided, add chunk to chunks
+                    name = str(len(chunk)) # Add taxonomic info for each element in chunk
+                    for arg in args:
+                        name += '_' + arg
+                    name += '_' + rank
+                    chunks[name] = chunk
 
         return chunks
 
@@ -140,6 +130,7 @@ class UniteSubgroups:
         for chunk in self.chunks:
             sizes.append(len(self.chunks[chunk]))
         sizes = np.array(sizes)
+        occ = np.bincount(sizes)
 
         print("---- CHUNK SIZE REPORT ----")
         print("Number:", len(self.chunks))
@@ -148,6 +139,7 @@ class UniteSubgroups:
         print("Size (min):", np.min(sizes))
         print("Size (max):", np.max(sizes))
         # print("Sizes:\n", sizes)
+        return sizes
 
     
     def chunks_to_fasta(self, taxonomy=False):
