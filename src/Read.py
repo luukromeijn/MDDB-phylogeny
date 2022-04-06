@@ -9,7 +9,9 @@ for clade in ref_tree.find_clades():
     if clade.name == 'Fi1cons_02':
         clade.name = new_clade.name
         clade.clades = new_clade.clades
-        clade.branch_length = new_clade.branch_length   
+        clade.branch_length = new_clade.branch_length
+        clade.confidence = new_clade.confidence
+        clade.width = new_clade.width
 Phylo.draw(ref_tree)
 
 # data = SeqIO.index('Reference_ITS.fasta', 'fasta')
