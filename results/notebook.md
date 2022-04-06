@@ -52,3 +52,18 @@ Also see the distribution of the resulting chunk sizes below (compared to splitt
 ![Chunk size distribution](5-4-2022/Chunksizedistribution.png)
 
 This method of splitting up based on order and only making an extra split on family is the exact method as proposed by Vincent and Rutger. With the generalized implementation, this would allow us to do a more structured experiment with the different chunk sizes to see what's best. Or maybe just go with the one described above since the results seem pretty ok.
+
+# 6-4-2022
+Created a method that will paste one tree into another tree.
+It is possible to select a subpart of a tree by name or length of the branch.
+Then the parameters of this subtree are mutable, including the clades inside this subtree.
+This way the new tree will be entered in the place you want.
+This will look as follows:
+
+![Entire tree](6-4-2022/Test_tree.png)
+
+![Subtree](6-4-2022/Subtree.png)
+
+This will result in:
+
+![Result](6-4-2022/Result.png)
