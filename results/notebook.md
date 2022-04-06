@@ -53,6 +53,8 @@ Also see the distribution of the resulting chunk sizes below (compared to splitt
 
 This method of splitting up based on order and only making an extra split on family is the exact method as proposed by Vincent and Rutger. With the generalized implementation, this would allow us to do a more structured experiment with the different chunk sizes to see what's best. Or maybe just go with the one described above since the results seem pretty ok.
 
+Tried running MAFFT and RAxML for the biggest chunk (size 9192, Basidiomycota_Agaricomycetes_Agaricales). MAFFT finished within 20 minutes, [here](5-4-2022/result_modified.fasta) is an idea of what the output looked like (first two seqs). The huge number of insertions doesn't seem very good. RAxML didn't finish, but got to the 3rd bootstrap tree after 15 hours (Intel Core i7 8th gen, 4 threads). 
+
 # 6-4-2022
 Created a method that will paste one tree into another tree.
 It is possible to select a subpart of a tree by name or length of the branch.
