@@ -1,13 +1,19 @@
 from UniteSubgroups import UniteSubgroups
 import matplotlib.pyplot as plt
 
-# Downloaded from https://doi.org/10.15156/BIO/1264708 
-fasta_path = 'data\sh_qiime_release_10.05.2021\sh_refs_qiime_ver8_dynamic_10.05.2021.fasta'
-taxon_path = 'data\sh_qiime_release_10.05.2021\sh_taxonomy_qiime_ver8_dynamic_10.05.2021.txt'
+# Downloaded from https://doi.org/10.15156/BIO/1264708
+# LINUX
+fasta_path = 'data/sh_qiime_release_10.05.2021/sh_refs_qiime_ver8_97_10.05.2021.fasta'
+taxon_path = 'data/sh_qiime_release_10.05.2021/sh_taxonomy_qiime_ver8_97_10.05.2021.txt'
+# Windows
+# fasta_path = 'data\sh_qiime_release_10.05.2021\sh_refs_qiime_ver8_97_10.05.2021.fasta'
+# taxon_path = 'data\sh_qiime_release_10.05.2021\sh_taxonomy_qiime_ver8_97_10.05.2021.txt'
 
 # Initialize class
 subgroups = UniteSubgroups()
 subgroups.import_data(fasta_path, taxon_path)
+
+print("Distance between sequence 1 and 2 in the data:", subgroups.distances.pairwise_distance(0,1))
 
 # Split on order level
 subgroups.split(3)

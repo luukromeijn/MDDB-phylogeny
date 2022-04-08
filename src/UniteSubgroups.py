@@ -1,18 +1,23 @@
 from Bio import SeqIO
 import json 
 import numpy as np
+from alfpy.utils import seqrecords
+from alfpy import word_pattern
+from alfpy import word_vector
+from alfpy import word_distance
 
 class UniteSubgroups:
     '''For dividing data from UNITE into subgroups based on taxonomy data.'''
 
     def __init__(self):
         self.sequences = None
+        self.distances = None
         self.taxonomies = None
         self.taxon_tree = None
         self.chunks = None
 
 
-    def check_requirements(self, fasta=False, taxon=False, chunks=False):
+    def check_requirements(self, fasta=False, taxon=False, chunks=False, distances=False):
         '''Checks whether required attributes are set.'''
         if fasta and self.sequences == None:
             raise RuntimeError("Sequence data not imported.")
@@ -20,25 +25,48 @@ class UniteSubgroups:
             raise RuntimeError("Taxon data not imported.")
         if chunks and self.chunks == None:
             raise RuntimeError("Data has not yet been divided in chunks.")
+        if distances and self.distances == None:
+            raise RuntimeError("No pairwise distances have been calculated.")
 
 
-    def import_data(self, fasta_path: str, taxon_path: str):
+    def import_data(self, fasta_path: str, taxon_path: str, distances=True, k: int=3):
         '''Reads fasta and taxon data, sets class attributes'''
-        self.set_seq_data(fasta_path)
+        self.set_seq_data(fasta_path, distances=distances, k=k)
         self.set_tax_data(taxon_path)
 
 
-    def set_seq_data(self, path: str) -> list:
+    def set_seq_data(self, path: str, distances=True, k: int=3) -> list:
         '''Returns and sets list representation of fasta data'''
+
         data = []
         for record in SeqIO.parse(path, "fasta"):
             data.append(record)
+
+        if distances:
+            self.set_dist_data(path, k=k) # Also calculate pairwise distances
+
         self.sequences = data
         return self.sequences
 
 
+    def set_dist_data(self, path: str, k: int=3) -> word_distance:
+        '''Returns and sets pairwise k-mer google distances'''
+
+        fh = open(path)
+        seq_records = seqrecords.read_fasta(fh)
+        fh.close()
+
+        pattern = word_pattern.create(seq_records.seq_list, word_size=k)
+        counts = word_vector.Counts(seq_records.length_list, pattern)
+        distances = word_distance.Distance(counts, 'google')
+
+        self.distances = distances
+        return distances
+
+
     def set_tax_data(self, path: str) -> dict:
         '''Returns and sets dict representation of taxon data'''
+
         data = open(path)
         data = data.readlines()
         taxonomies = []
