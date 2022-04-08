@@ -73,3 +73,7 @@ This will result in:
 # 7-4-2022
 Implemented the distance calculation with `alfpy`, using the `w-metric` system.
 I have tested it on the ITS sequences, we got from Vincent, when adding a new sequence. Selecting the 5 best results will show where in the tree the new sequence belongs best. Then I retrieved the Most Recent Common Ancestor `(MRCA)` in the tree from these sequences. The next step is to select all sequences in the clade of this MRCA and create a new fasta file which can be used for the alignment.
+
+# 8-4-2022
+From the MRCA, all childs are derived in a recursive function.
+From all these childs a new fasta file is created, including the new sequence.
