@@ -11,7 +11,8 @@ def create_server_connection(host_name, user_name, user_password):
         connection = mysql.connector.connect(
             host=host_name,
             user=user_name,
-            passwd=user_password
+            passwd=user_password,
+            database=None
         )
         print("MySQL Database connection successful")
     except Error as err:

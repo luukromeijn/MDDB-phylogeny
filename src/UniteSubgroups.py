@@ -1,6 +1,7 @@
 from Bio import SeqIO
 import json 
 import numpy as np
+from ConnectDatabase import ConnectDatabase
 from alfpy.utils import seqrecords
 from alfpy import word_pattern
 from alfpy import word_vector
@@ -11,9 +12,9 @@ class UniteSubgroups:
 
     def __init__(self):
         self.sequences = None
-        self.distances = None
         self.taxonomies = None
         self.taxon_tree = None
+        self.distance_db = None
         self.chunks = None
 
 
@@ -23,45 +24,26 @@ class UniteSubgroups:
             raise RuntimeError("Sequence data not imported.")
         if taxon and self.taxon_tree == None:
             raise RuntimeError("Taxon data not imported.")
+        if distances and self.distance_db == None:
+            raise RuntimeError("No pairwise distances have been calculated.")
         if chunks and self.chunks == None:
             raise RuntimeError("Data has not yet been divided in chunks.")
-        if distances and self.distances == None:
-            raise RuntimeError("No pairwise distances have been calculated.")
 
 
-    def import_data(self, fasta_path: str, taxon_path: str, distances=True, k: int=3):
-        '''Reads fasta and taxon data, sets class attributes'''
-        self.set_seq_data(fasta_path, distances=distances, k=k)
+    def import_data(self, fasta_path: str, taxon_path: str, dist_table: str, host_name: str="localhost", username: str="root", user_password: str="root", k: int=3):
+        '''Reads fasta, taxon, and distance data, sets class attributes'''
+        self.set_seq_data(fasta_path)
         self.set_tax_data(taxon_path)
+        self.set_dist_data(dist_table, fasta_path, host_name=host_name, username=username, user_password=user_password, k=k)
 
 
     def set_seq_data(self, path: str, distances=True, k: int=3) -> list:
         '''Returns and sets list representation of fasta data'''
-
         data = []
         for record in SeqIO.parse(path, "fasta"):
             data.append(record)
-
-        if distances:
-            self.set_dist_data(path, k=k) # Also calculate pairwise distances
-
         self.sequences = data
         return self.sequences
-
-
-    def set_dist_data(self, path: str, k: int=3) -> word_distance:
-        '''Returns and sets pairwise k-mer google distances'''
-
-        fh = open(path)
-        seq_records = seqrecords.read_fasta(fh)
-        fh.close()
-
-        pattern = word_pattern.create(seq_records.seq_list, word_size=k)
-        counts = word_vector.Counts(seq_records.length_list, pattern)
-        distances = word_distance.Distance(counts, 'google')
-
-        self.distances = distances
-        return distances
 
 
     def set_tax_data(self, path: str) -> dict:
@@ -94,6 +76,29 @@ class UniteSubgroups:
         self.taxon_tree = taxon_tree
         self.taxonomies = taxonomies
         return self.taxon_tree
+
+
+    def set_dist_data(self, dist_table: str, fasta_path: str, host_name: str="localhost", username: str="root", user_password: str="root", k: int=3):
+        '''Calculates pairwise distances and stores in SQL database'''
+
+        distance_db = ConnectDatabase("localhost", "root", "root", "UniteDistances")
+        if not distance_db.table_exists(dist_table): # Calculate distances if the table not exists
+            distance_db.create_table(dist_table, "seq_1 INT, seq_2 INT, distance FLOAT(24)")
+            fh = open(fasta_path)
+            seq_records = seqrecords.read_fasta(fh)
+            fh.close()
+            pattern = word_pattern.create(seq_records.seq_list, word_size=k)
+            counts = word_vector.Counts(seq_records.length_list, pattern)
+            distances = word_distance.Distance(counts, 'google')
+            for seq_1 in range(seq_records.count):
+                fill_table_query = "INSERT INTO " + dist_table + " VALUES "
+                for seq_2 in range(seq_1, seq_records.count):
+                    fill_table_query += "(" + str(seq_1) + ", " + str(seq_2) + ", " + str(distances.pairwise_distance(seq_1, seq_2)) + "),\n"
+                fill_table_query = fill_table_query[:-2] + ";"
+                distance_db.query(fill_table_query, commit=True)
+
+        self.distance_db = distance_db
+        self.dist_table = dist_table
 
 
     def json_taxon_tree(self):
@@ -233,3 +238,13 @@ class UniteSubgroups:
 
         return sequence
         
+
+    def get_distance(self, sequence_1: int, sequence_2: int):
+        '''Returns pairwise distance between two sequences'''
+        
+        self.check_requirements(distances=True)
+        sequences = [sequence_1, sequence_2]
+        sequences.sort()
+        query = "SELECT distance FROM " + self.dist_table + " WHERE seq_1=" + str(sequences[0]) + " AND seq_2=" + str(sequences[1]) + ";"
+        
+        return self.distance_db.query(query)[0][0]
