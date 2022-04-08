@@ -5,8 +5,20 @@ from alfpy.utils.data import subsmat
 from alfpy import wmetric
 from alfpy import ncd
 
-def find_names(clade):
-    return
+def find_names(ancestor, names):
+    for clade in ancestor.clades:
+        if clade.name:
+            names.append(clade.name)
+        else:
+            find_names(clade, names)
+
+def write_to_fasta(childs, records):
+    new_file = open('new_file.fasta', 'w')
+    new_file.write(">" + records.id_list[-1] + "\n" + records.seq_list[-1] + "\n")
+    for child in childs:
+        sequence = records.seq_list[records.id_list.index(child)]
+        new_file.write(">" + child + "\n" + sequence + "\n")
+    new_file.close()
 
 ref_tree = Phylo.read('RAxML_bestTree.output_1.tre', 'newick')
 # test_tree = Phylo.read('test.tre', 'newick')
@@ -33,26 +45,17 @@ for x in range(1):
     for y in range(seq_records.count-1):
         distances.append((seq_records.id_list[y], dist.pairwise_distance(y, seq_records.count-1)))
     best_distances = sorted(distances, key = lambda i: i[1])[:5]
-    # print(best_distances)
     ancestor = ref_tree.common_ancestor(best_distances[0][0], best_distances[1][0], best_distances[2][0], best_distances[3][0], best_distances[4][0])
-    # find_names(ancestor)
-    for clade in ancestor.clades:
-        if clade.name:
-            print(clade.name)
-        else:
-            print(clade.clades)
+    child_names = []
+    find_names(ancestor, child_names)
+    print(child_names)
+    write_to_fasta(child_names, seq_records)
 Phylo.draw(ref_tree)
     # for distance in best_distances:
     #     for clade in ref_tree.find_clades(name=distance[0]):
     #         print(clade.name)
     # for clade in ref_tree.find_clades(name=best_distances[0][0]):
     #     print(clade.clades)
-# new_file = open('new_file.fasta', 'w')
-# new_file.write(">" + seq_records.id_list[-1] + "\n" + seq_records.seq_list[-1] + "\n")
-# for distance in best_distances:
-#     sequence = seq_records.seq_list[seq_records.id_list.index(distance[0])]
-#     new_file.write(">" + distance[0] + "\n" + sequence + "\n")
-# new_file.close()
 
 # data = SeqIO.index('Reference_ITS.fasta', 'fasta')
 # for line in data:
