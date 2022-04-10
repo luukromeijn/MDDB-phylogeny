@@ -1,0 +1,1 @@
+/usr/bin/mafft"  --auto --inputorder "1688_Basidiomycota_Agaricomycetes_Thelephorales_Thelephoraceae.fasta" > "mafft_result.fasta

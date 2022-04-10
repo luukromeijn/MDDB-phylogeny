@@ -77,3 +77,12 @@ I have tested it on the ITS sequences, we got from Vincent, when adding a new se
 # 8-4-2022
 From the MRCA, all childs are derived in a recursive function.
 From all these childs a new fasta file is created, including the new sequence.
+
+# 10-4-2022
+Ran MAFFT and RAxML for the chunk Basidiomycota Agaricomycetes Thelephorales Thelephoraceae (split on order, size 1688) on my own laptop (Intel Core i7 gen 8). MAFFT finished quickly, RAxML took 1.822125 days. Settings have been stored in the results folder. Results were inspected using [mesquiteproject](http://www.mesquiteproject.org/). The alignment seemed valid but contained many empty insertions at the end of the sequences. As for the tree, the chunk contained many sequences of the same family (tomantella), but we observed that the sequences who were not in this family but in a different one were clustered together which seemed positive. See the visualizations below.
+
+![Alignment-good](10-4-2022/Alignment1000chunk1.png)
+
+![Alignment-bad](10-4-2022/Alignment1000chunk2.png)
+
+![Tree](10-4-2022/Tree1000Chunk.png)
