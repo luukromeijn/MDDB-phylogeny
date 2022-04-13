@@ -86,3 +86,13 @@ Ran MAFFT and RAxML for the chunk Basidiomycota Agaricomycetes Thelephorales The
 ![Alignment-bad](10-4-2022/Alignment1000chunk2.png)
 
 ![Tree](10-4-2022/Tree1000Chunk.png)
+
+# 13-4-2022
+We approach outgroup identification as follows: for each sequence that is not in the ingroup, we calculate the average distance to the ingroup. The 10 sequences with the lowest such distance are considered to be the outgroup. As a distance measure we use alignment-free methods from the `alfpy` package.
+
+Despite being alignment-free, calculating pairwise distances is still rather slow. Thus, we fill a mysql database once and then read the data from this database with the sequences as indices for quick retrieval. A 41000×41000 pairwise distance matrix can be stored as (41000×41001)/2 = 840 520 500 rows in a database (as the matrix is symmetrical). With every row being 12 bytes (4+4+4 for seq_1, seq_2, float value), this database will be 9.39 GB big.
+
+Filling the database for the first 500 sequences with all their 500×41898 pairwise distances (which is 0.025% of the total) already took 1.04 hours on my personal computer (Intel Core i7). Filling the entire database would then take about 40 hours. We haven't done this yet. The `w-metric` method from `alfpy` was used to calculate the distances, k-mer distance was also implemented but this was even slower.
+
+A new `ConnectDatabase` class was made to facilitate the above, and `UniteSubgroups` now communicates with this new class when it recognizes the distance database is not yet present on the current system, to initialize the calculation. Once this distance database is present, the `identify_outgroup` method can be called to retrieve the 10 sequences with lowest distance to the ingroup. I was unable to come up with a query that could do this in once (without becoming extremely slow) so I loop over the sequences with Python and then pick the best 10. This method is not very quick either. For the first 500 sequences and an ingroup with size of 100, it took 89 seconds to calculate the 10 closest sequences. It might take about an hour (or more) to then do this when the entire database is filled. For 463 chunks that all need outgroups, that is quite a lot... 
+
