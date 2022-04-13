@@ -16,12 +16,14 @@ class ConnectDatabase:
     def query(self, query: str, commit: bool=False):
         '''Performs a query on the connected database'''
 
+        self.db_connection.reconnect()
         cursor = self.db_connection.cursor()
         try:
             cursor.execute(query)
             if commit:
                 self.db_connection.commit()
             result = cursor.fetchall()
+            cursor.close()
             return result
         except Error as err:
             print(f"Error: '{err}'")

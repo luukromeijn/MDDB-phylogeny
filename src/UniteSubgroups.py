@@ -6,6 +6,9 @@ from alfpy.utils import seqrecords
 from alfpy import word_pattern
 from alfpy import word_vector
 from alfpy import word_distance
+from alfpy import wmetric
+from alfpy.utils.data import subsmat
+import time
 
 class UniteSubgroups:
     '''For dividing data from UNITE into subgroups based on taxonomy data.'''
@@ -34,7 +37,7 @@ class UniteSubgroups:
         '''Reads fasta, taxon, and distance data, sets class attributes'''
         self.set_seq_data(fasta_path)
         self.set_tax_data(taxon_path)
-        self.set_dist_data(dist_table, fasta_path, host_name=host_name, username=username, user_password=user_password, k=k)
+        self.set_dist_data(dist_table, fasta_path, host_name=host_name, username=username, user_password=user_password) #TODO optional add k for k-mer
 
 
     def set_seq_data(self, path: str, distances=True, k: int=3) -> list:
@@ -78,24 +81,52 @@ class UniteSubgroups:
         return self.taxon_tree
 
 
-    def set_dist_data(self, dist_table: str, fasta_path: str, host_name: str="localhost", username: str="root", user_password: str="root", k: int=3):
-        '''Calculates pairwise distances and stores in SQL database'''
+    def set_dist_data(self, dist_table: str, fasta_path: str, host_name: str="localhost", username: str="mddb-phylogeny", user_password: str="mddb"):
+        '''Calculates w-metric pairwise distances and stores in SQL database'''
 
-        distance_db = ConnectDatabase("localhost", "root", "root", "UniteDistances")
+        distance_db = ConnectDatabase(host_name, username, user_password, "UniteDistances")
+        matrix = subsmat.get('blosum62')
         if not distance_db.table_exists(dist_table): # Calculate distances if the table not exists
-            distance_db.create_table(dist_table, "seq_1 INT, seq_2 INT, distance FLOAT(24)")
+            distance_db.create_table(dist_table, "seq_1 INT, seq_2 INT, distance FLOAT(24), INDEX(seq_1), INDEX(seq_2)")
+            fh = open(fasta_path)
+            seq_records = seqrecords.read_fasta(fh)
+            fh.close()
+            distances = wmetric.Distance(seq_records, matrix)
+            t0= time.clock()
+            for seq_1 in range(500): # NOTE Takes 3728 secondes for 500, should be seq_records.count
+                fill_table_query = "INSERT INTO " + dist_table + " VALUES "
+                for seq_2 in range(seq_1, seq_records.count):
+                    fill_table_query += "(" + str(seq_1) + ", " + str(seq_2) + ", " + str(distances.pairwise_distance(seq_1, seq_2)) + "),\n"
+                fill_table_query = fill_table_query[:-2] + ";"
+                distance_db.query(fill_table_query, commit=True)
+            t1 = time.clock()
+            print("Time elapsed: ", t1 - t0)
+
+        self.distance_db = distance_db
+        self.dist_table = dist_table
+
+
+    def old_set_dist_data(self, dist_table: str, fasta_path: str, host_name: str="localhost", username: str="mddb-phylogeny", user_password: str="mddb", k: int=3):
+        '''Calculates k-mer pairwise distances and stores in SQL database'''
+
+        distance_db = ConnectDatabase(host_name, username, user_password, "UniteDistances")
+        if not distance_db.table_exists(dist_table): # Calculate distances if the table not exists
+            distance_db.create_table(dist_table, "seq_1 INT, seq_2 INT, distance FLOAT(24), INDEX(seq_1), INDEX(seq_2)")
             fh = open(fasta_path)
             seq_records = seqrecords.read_fasta(fh)
             fh.close()
             pattern = word_pattern.create(seq_records.seq_list, word_size=k)
             counts = word_vector.Counts(seq_records.length_list, pattern)
             distances = word_distance.Distance(counts, 'google')
-            for seq_1 in range(seq_records.count):
+            t0= time.clock()
+            for seq_1 in range(500): # NOTE Should be seq_records.count, not yet timed.
                 fill_table_query = "INSERT INTO " + dist_table + " VALUES "
                 for seq_2 in range(seq_1, seq_records.count):
                     fill_table_query += "(" + str(seq_1) + ", " + str(seq_2) + ", " + str(distances.pairwise_distance(seq_1, seq_2)) + "),\n"
                 fill_table_query = fill_table_query[:-2] + ";"
                 distance_db.query(fill_table_query, commit=True)
+            t1 = time.clock()
+            print("Time elapsed: ", t1 - t0)
 
         self.distance_db = distance_db
         self.dist_table = dist_table
@@ -163,7 +194,6 @@ class UniteSubgroups:
         for chunk in self.chunks:
             sizes.append(len(self.chunks[chunk]))
         sizes = np.array(sizes)
-        occ = np.bincount(sizes)
 
         print("---- CHUNK SIZE REPORT ----")
         print("Number:", len(self.chunks))
@@ -245,6 +275,36 @@ class UniteSubgroups:
         self.check_requirements(distances=True)
         sequences = [sequence_1, sequence_2]
         sequences.sort()
-        query = "SELECT distance FROM " + self.dist_table + " WHERE seq_1=" + str(sequences[0]) + " AND seq_2=" + str(sequences[1]) + ";"
+        query = "SELECT distance FROM " + self.dist_table + " WHERE seq_1=" + str(sequences[0]) + " AND seq_2=" + str(sequences[1]) + " LIMIT 1;"
         
         return self.distance_db.query(query)[0][0]
+
+    
+    def identify_outgroup(self, ingroup: list) -> list:
+        '''Returns indices of sequences with smallest distances to the ingroup'''
+
+        # Storing the ingroup as a table
+        self.distance_db.create_table("ingroup", "seq int")
+        ingroup_creation = "INSERT INTO ingroup VALUES "
+        for seq_id in ingroup:
+            ingroup_creation += "(" + str(seq_id) + "),"
+        self.distance_db.query(ingroup_creation[:-1] + ";", commit=True)
+
+        dist_to_outgroup = []
+        for i in range(500): # NOTE should be len(self.sequences). This setting takes 89 seconds
+            if i in ingroup: # Should not be in ingroup
+                dist_to_outgroup.append(np.NaN) # Append NaN to keep index structure for argsort
+                continue
+            query = """
+            SELECT AVG(distance) 
+            FROM distances 
+            WHERE
+            (seq_2 in (select * from ingroup) and seq_1=""" + str(i) + """) OR
+            (seq_1 in (select * from ingroup) and seq_2=""" + str(i) + """);"""
+            dist_to_outgroup.append(self.distance_db.query(query)[0][0])
+
+        sorted = np.argsort(dist_to_outgroup)[:10]
+        # print([dist_to_outgroup[i] for i in sorted]) # Uncomment to print distances
+        return [seq_index for seq_index in sorted]
+        
+        
