@@ -96,3 +96,17 @@ Filling the database for the first 500 sequences with all their 500×41898 pairw
 
 A new `ConnectDatabase` class was made to facilitate the above, and `UniteSubgroups` now communicates with this new class when it recognizes the distance database is not yet present on the current system, to initialize the calculation. Once this distance database is present, the `identify_outgroup` method can be called to retrieve the 10 sequences with lowest distance to the ingroup. I was unable to come up with a query that could do this in once (without becoming extremely slow) so I loop over the sequences with Python and then pick the best 10. This method is not very quick either. For the first 500 sequences and an ingroup with size of 100, it took 89 seconds to calculate the 10 closest sequences. It might take about an hour (or more) to then do this when the entire database is filled. For 463 chunks that all need outgroups, that is quite a lot... 
 
+# 15-4-2022
+We used a package to call `MAFFT` and `RAxML` from within the python file.
+So now the code is able to loop over all new data points and add these to the tree.
+First of all it does a check if the new sequence does not already exist in the tree.
+If it is indeed a new sequence, it uses the `alfpy` package to calculate the distance to all other sequences in the tree. Based on these distances the three closest sequences are selected.
+From these three, the `MRCA` is retrieved, and then all of its kids. 
+These sequences are then re-alligned with the new sequence in MAFFT.
+The new allginment is then used in RAxML to create the new subtree.
+The last step taken is to replace the old subtree, under the found MRCA, with the newly created subtree.
+
+With the data we got from Vincent, this will results in the following figure:
+![New_Tree](15-4-2022/Figure_1.png)
+
+Or draw the tree from (15-4-2022/new_ref_tree.newick)
