@@ -110,3 +110,29 @@ With the data we got from Vincent, this will results in the following figure:
 ![New_Tree](15-4-2022/Figure_1.png)
 
 Or draw the tree from (15-4-2022/new_ref_tree.newick)
+
+# 20-4-2022
+About the new code structure:
+* `Chunks.py` dividing data from UNITE into chunks. (previously `UniteSubgroups.py`) 
+    * `Chunk`: contains indices corresponding to sequence data in its `ingroup` and `outgroup` attributes.
+    * `chunk_size_report`
+    * `UniteData`: contains sequence and taxonomy data from a UNITE release and methods that use this data (like `chunks_to_fasta`).
+* `DistanceData.py`: storing the distances between sequences in a database.
+    * `PairwiseDistances`: calculating and using the pairwise distance data.
+    * `ConnectDatabase`: setting up a database connection.
+
+`PairwiseDistances` now contains a `determine_outgroup` method for chunks, and the code supports dumping the entire chunk to FASTA (ingroup + outgroup). Given this new functionality, two experiments were done. Note that only limited distance data was available (only first 600 rows of matrix).
+
+## Outgroup try-out, small chunk
+The alignment for the chunk _Ascomycota Eurotiomycetes Eurotiales Thermoascaceae_ with size 56 and with outgroups included is shown below. The outgroups align ok except for one. Maybe this problem will be solved once more pairwise distances are available. It is actually noteworthy that the alignment does so well given that only 600 rows of the distance data are available. Maybe we don't need to search the entire matrix to find suitable outgroups? Maybe we can stop at a threshold distance value? 
+
+![alignment-with-outgroup](20-4-2022/chunk_size_56/alignment-with-outgroup.png)
+
+The alignment was used to build the tree below. 10 outgroups were used and inputted using the `-o` flag of raxml. However, this resulted in the following user warning: `outgroups are not monophyletic, using first outgroup from the list to root the tree!` 1 and 4 below are still look like outgroups. Maybe 2 is ok too. But 3 is pretty nested in the tree, which should not be happening for an outgroup. 
+
+![tree-with-outgroup](20-4-2022/chunk_size_56/tree.png)
+
+## Outgroup try-out, big chunk
+The alignment for the chunk _Basidiomycota Agaricomycetes Agaricales Cortinariaceae_ with size 1002 and with outgroups included is shown below. The outgroups seem to align relatively well. Not sure about the overall quality of the alignment.
+
+![alignment-with-outgroup](20-4-2022/chunk_size_1002/alignment-with-outgroup-bigchunk.png)
