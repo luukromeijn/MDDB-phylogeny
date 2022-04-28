@@ -1,2 +1,4 @@
 data/sh*
+src/alfpy/*
+data/pw_distances*
 *.pyc

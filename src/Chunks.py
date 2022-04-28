@@ -28,6 +28,16 @@ def chunk_size_report(chunks: 'list[Chunk]'):
     return sizes
 
 
+def discard_small_chunks(chunks: 'list[Chunk]', min_size: int=3):
+    '''Removes chunks from the list that are smaller than min_size'''
+
+    new_chunks = []
+    for chunk in chunks:
+        if len(chunk.ingroup) >= min_size: 
+            new_chunks.append(chunk)
+    
+    return new_chunks
+
 class UniteData:
     '''Imports and holds data from a UNITE release'''
 
@@ -94,6 +104,7 @@ class UniteData:
 
         chunks = []
         for name in ingroups:
+            ingroups[name].sort()
             chunks.append(Chunk(name, ingroups[name]))
             
         return chunks
@@ -142,7 +153,8 @@ class UniteData:
                     sequence = self.get_seq_tax(seq_index)
                 else:
                     sequence = self.sequences[seq_index]
-                sequence.id = "OUTGROUP " + sequence.id
+                sequence.id = "OUTGROUP_" + sequence.id
+                sequence.description = ""
                 seqs.append(sequence)
             SeqIO.write(seqs, "results/chunks/" + str(len(chunk.ingroup)) + " " + chunk.name + ".fasta", "fasta")
 
