@@ -149,3 +149,31 @@ Since we are still unsure whether w-metric is a reasonable (the best) distance m
 We run it for wmetric table which gives the result: 0.248. Meaning that using the w-metric and this chunk division (`create_chunks(3,4, max_size=1500)`), the average pairwise distance within chunk ingroups is 4 times smaller than the average pairwise distances from the matrix. I was quite satisfied with this. 
 
 We also enabled k-mer pairwise distances. We plan to run this over the weekend (since its even on Nundu quite slow) for `k=6`.
+
+# 1-5-2022:
+New: `discard_distant_sequences` removes sequences with a high average distance from ingroups. Tested this using the w-metric matrix, but doesn't remove the sequences that look out of place in the alignment. Made me doubt the quality of the w-metric. Found its original [article](https://doi.org/10.1093/bioinformatics/btg392), turns out its meant for amino acid sequences.
+
+Google k-mer distance from alfpy performs well in [this](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1755-7) comparison. Generated a distance matrix using `k=6`. This took about 1.5 day to calculate on Nundu. Run `evaluate` for a chunk division `create_chunks(3,4, max_size=1500)`, got a score of 0.56, meaning the average pairwise distance within chunk ingroups is 1.78 times smaller than the average pairwise distances from the matrix. How this score develops for different splitting levels can be viewed [here](results/1-5-2022/distances_per_splitting_level_6mergoogle.png). That didn't seem promising, but later I realized that this is maybe not a very descriptive score to assess the quality of a distance measure. 
+
+Because other results did look very promising for k-mer google distance. Outgroups seem to align better than they did with w-metric. See comparison below for a large (1002) chunk.
+
+Using w-metric:
+![1002-wmetric-outgroup](1-5-2022/1002-wmetric-outgroup.png)
+
+Using 6-mer google distance:
+![1002-6mergoogle-outgroup](1-5-2022/1002-6mergoogle-outgroup.png)
+
+`discard_distant_sequences` also worked better. For different strictness levels, the sequences that the algorithm identified as to be discarded are shown below (for a chunk of size 50). Setting the right strictness level may be an important but challenging future step: 
+![discard-per-step](1-5-2022/deleteperstep.png)
+
+Discarding the sequences with a seemingly optimal strictness level of 1.35 then led to the following improved alignment:
+![actuallydiscarded](1-5-2-2022/actuallydiscarded.png)
+
+Running `discard_distant_sequences` with a 1.35 strictness level let to discarding 25235 (!). In my view, this can mean the following:
+* The strictness level is set too high
+* The expert-provided taxon identification is not very accurate
+* We must split further than order level
+
+One thing that I feel is lacking in this analysis is a measure of how good a chunk division, parameter setting, distance measure, etc. is. If we would have such a measure, perhaps we can run some more structured experiments to settle on an ideal configuration. 
+
+Finally, I installed MAFFT on Nundu and wrote some code to loop over all chunks and align them. For all the chunks, this finished in 5-10 minutes.

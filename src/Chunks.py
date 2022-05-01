@@ -32,11 +32,14 @@ def discard_small_chunks(chunks: 'list[Chunk]', min_size: int=3):
     '''Removes chunks from the list that are smaller than min_size'''
 
     new_chunks = []
+    discarded = []
     for chunk in chunks:
         if len(chunk.ingroup) >= min_size: 
             new_chunks.append(chunk)
+        else:
+            discarded += chunk.ingroup
     
-    return new_chunks
+    return new_chunks, discarded
 
 class UniteData:
     '''Imports and holds data from a UNITE release'''
@@ -134,13 +137,11 @@ class UniteData:
         return chunks
 
 
-    def chunks_to_fasta(self, chunks, taxonomy=False, discard_small=True):
+    def chunks_to_fasta(self, chunks, taxonomy=False):
         '''Creates fasta file with seq data for each chunk.
         Taxonomy==True will include taxonomy in fasta headers.'''
 
         for chunk in chunks:
-            if discard_small and len(chunk.ingroup) < 3:
-                continue
             seqs = []
             for seq_index in chunk.ingroup:
                 if taxonomy:

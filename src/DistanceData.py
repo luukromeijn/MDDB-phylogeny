@@ -1,5 +1,3 @@
-# import mysql.connector
-# from mysql.connector import Error
 from alfpy.utils import seqrecords
 from alfpy import wmetric
 from alfpy.utils import distmatrix
@@ -75,49 +73,41 @@ class PairwiseDistance:
     def multiple_distance(self, sequences: 'list[int]'):
         '''Calculates the average distance between sequences in a list'''
 
-        total_distance = 0
-        for seq_1 in sequences:
-            for seq_2 in sequences:
-                total_distance += self.matrix[seq_1, seq_2]
-
-        return total_distance/(len(sequences)**2)
+        return np.average(self.matrix[sequences][:,sequences])
     
     
-    def evaluate(self, chunks: 'list[Chunk]'):
+    def evaluate(self, chunks: 'list[Chunk]', full_output=False):
         '''Evaluates distance matrix based on assumption that chunk ingroup distance should be low.
         Returns ratio: (distance within chunk ingroup)/(average distance in matrix).
         Lower score is better.'''
 
-        score = 0
+        score = []
         avg_distance = np.average(self.matrix)
         for i in range(len(chunks)):
             distance = self.multiple_distance(chunks[i].ingroup)
-            score += distance/avg_distance    
+            score.append(distance/avg_distance)    
 
-        return score/i
+        if full_output:
+            return score
+        else:
+            return np.average(score)
 
-    # Pseudo or whatever
-    def EvaluateDistanceMeasure():
-        '''
-        Goal: measure the accuracy of the distance measure. 
-        Why? to know which distance measure to pick. 
-        How: aim for lowest distance in ingroups
-        But: not all measures will use the same scale.
-        So: devide by average distance in table
-        '''
-        pass
+    
+    def discard_distant_sequences(self, chunks: 'list[Chunk]', strictness: int=1):
+        '''Removes distant sequences from chunks'''
 
-    # Pseudo or whatever
-    def EvaluateChunkDivision():
-        '''
-        Goal: find out what chunk division is best.
-        Multiple factors of influence:
-        - Size (distribution)
-        - How well the chunk aligns. 
+        discarded = []
+        avg_distance = np.average(self.matrix)
+        
+        for chunk in chunks:
+            new_ingroup = []
+            for sequence in chunk.ingroup:
+                # Discard if distance is bigger than the average distance in the matrix
+                if np.average(self.matrix[sequence, chunk.ingroup]) >= (1/strictness)*avg_distance:
+                    # TODO: Maybe take into account removing the distance to itself (will always be low)?
+                    discarded.append(sequence)
+                else:
+                    new_ingroup.append(sequence)
+            chunk.ingroup = new_ingroup
 
-        The distance could provide a quick indication of how well the chunk will align.
-        However, it's also very predictable: the further you go down in the tree, the better the alignment will become. At least under the assumption that the classification has been well done.  
-        So maybe it's more a matter of size. 
-        Or maybe it's not suited for this at all. 
-        '''
-        pass
+        return chunks, discarded
