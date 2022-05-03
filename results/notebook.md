@@ -177,3 +177,20 @@ Running `discard_distant_sequences` with a 1.35 strictness level let to discardi
 One thing that I feel is lacking in this analysis is a measure of how good a chunk division, parameter setting, distance measure, etc. is. If we would have such a measure, perhaps we can run some more structured experiments to settle on an ideal configuration. 
 
 Finally, I installed MAFFT on Nundu and wrote some code to loop over all chunks and align them. For all the chunks, this finished in 5-10 minutes.
+
+# 3-5-2022
+Today we worked on the phylogenetic placement. 
+
+Several factors seem to indicate that the OTU's from Vincent's experimental data set should be positioned very near to each other, separated from the Ficons: 1) The k-mer and w-metric distances between the OTU's is smaller than between the OTU's and Ficons; 2) When running an alignment solely based on the ITS data, the same thing happens. 
+
+Put pplacer on Nundu and ran it for some test data. Steps to take:
+
+    \\ On local machine
+    pip install taxtastic
+    taxit create -l its -P package_name.refpkg  --aln-fasta tree_ref_alignment.fasta --tree-stats info_file_raxml.txt --tree-file ref_tree.nwk
+    \\ Then send package_name.refpkg and total_alignment.fasta (with new sequences included) to Nundu
+    \\ On Nundu
+    cd placement
+    ./pplacer -c package_name.refpkg total_alignment.fasta
+
+A `.jplace` file is generated. Still unsure how to visualize/interpet it. 
