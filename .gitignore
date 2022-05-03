@@ -1,2 +1,5 @@
 data/sh*
+src/alfpy/*
+data/pw_distances*
 *.pyc
+bin/mafft-7.490*
