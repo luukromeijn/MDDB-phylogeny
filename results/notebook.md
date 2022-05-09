@@ -194,3 +194,14 @@ Put pplacer on Nundu and ran it for some test data. Steps to take:
     ./pplacer -c package_name.refpkg total_alignment.fasta
 
 A `.jplace` file is generated. Still unsure how to visualize/interpet it. 
+
+# 7-5-2022
+Today we decided to select the closest sequences based on a percentage instead of a fixed amount. We have done this, because there could be 10 sequences that are around `0.7` for example, in this case you would want to rebuild a subtree around all 10 sequences instead of just the first three.
+
+RAxML always needs at least 4 sequences to generate a tree, so when selecting the 'x' percent closest sequences and there are not enough sequences close enough, the new sequence gets skipped temporarily. When this skipped sequence later on is within the best 'x' percent of another new sequence, they get added to the tree in the same iteration.
+
+After giving a try for all sequences to place it in the tree, there is a possibility that certain sequences remain skipped and are not added to the tree. These sequences will then be added based a fixed amount of closest sequences, currently in the tree.
+
+We have tested with multiple percentage values, for 10, 15 and 20%. We have run this for both the reference tree we got from Vincent as the tree generated in RAxML based on the ITS sequences. The results are in the `results\7-5-2022` folder. 
+
+The lower percentages result in more remaining skipped sequences, but eventually the trees visually look very similar. I will check this week if the created subgroups are also very similar.
