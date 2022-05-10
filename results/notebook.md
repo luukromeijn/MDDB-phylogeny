@@ -194,3 +194,24 @@ Put pplacer on Nundu and ran it for some test data. Steps to take:
     ./pplacer -c package_name.refpkg total_alignment.fasta
 
 A `.jplace` file is generated. Still unsure how to visualize/interpet it. 
+
+# 10-5-2022
+New/improved functions of the backbone creation part:
+* Fixed standardization in `evaluate`. Now returns average pairwise distance difference between sequences within ingroup and sequences within the entire matrix, expressed in standard deviations from the mean of the matrix.
+* Filtering on sequence length in `UniteData` since k-mer distance is heavily influenced by the length of the sequences.
+* Choosing `n` representatives for each chunk (picking the sequences with the lowest average distance to the rest of the ingroup). 
+* The distance matrix can be exported as a flat vector, taking into account its symmetric property, halving the file size. Loading takes 20 minutes on Nundu, so not for regular use. But may come in handy when comparing different matrices or publishing the matrix somewhere.
+* Exporting the sequences that have been discarded by one of the filters, to be added in the backbone expansion part. 
+
+The improved evaluation method shows that 6-mer Google distance has a relatively much lower average ingroup distance than w-metric, showing that it is much better. See figures below (labels are not correct).
+
+![evalwmetric](10-5-2022/wmetric_wrong_x_labels.png)
+![evalgoogle](10-5-2022/6mergoogle_wrongxlabels.png)
+
+The right values for the parameter `strictness` in `discard_distant_sequences` and `length_tolerance` in `UniteData` still have to be determined. Currently we're quite conservative, throwing away about half of the 42000 sequences. Does this conservativeness pay off? Results can be found in the `10-5-2022` folder. While outliers are removed from big chunks, the improvement is lower than expected, especially keeping in mind the large number of sequences that have been thrown away. Moreover, for small chunks, the filtering steps don't seem that necessary at all.
+
+After picking 2 representatives for each chunk, a high-level alignment has been made. We hoped the two representatives would stay together and form a sort of fork. To save time we only did this for the Ascomycota phylum. Sadly the representatives didn't stick together, making the tree look random. The alignment wasn't great either, as expected. Both can be seen below. We also tried to only focus on the highly-conserved part, but that tree showed the same kind of randomness.
+
+![evalwmetric](10-5-2022/Ascomycota_high_level.png)
+The tree, zoomed in.
+![evalgoogle](10-5-2022/Ascomycota_high_level_tree_zoomed_in.png.png)

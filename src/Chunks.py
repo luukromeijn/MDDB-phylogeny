@@ -5,10 +5,11 @@ import json
 class Chunk:
     '''Sequence data for a phylogenetic (sub)tree'''
 
-    def __init__(self, name: str, ingroup: list, outgroup: list=[]):
+    def __init__(self, name: str, ingroup: list, outgroup: list=[], representatives: list=[]):
         self.name = name
         self.ingroup = ingroup
         self.outgroup = outgroup
+        self.representatives = representatives
 
 
 def chunk_size_report(chunks: 'list[Chunk]'):
@@ -19,12 +20,11 @@ def chunk_size_report(chunks: 'list[Chunk]'):
         sizes.append(len(chunk.ingroup))
     sizes = np.array(sizes)
 
-    print("--- CHUNK INGROUP SIZE REPORT ---")
-    print("Number:", len(chunks))
-    print("Size (avg):", np.average(sizes))
-    print("Size (std):", np.std(sizes))
-    print("Size (min):", np.min(sizes))
-    print("Size (max):", np.max(sizes))
+    print("Divided data into", len(chunks), "chunks")
+    print("| Size (avg):", np.average(sizes))
+    print("| Size (std):", np.std(sizes))
+    print("| Size (min):", np.min(sizes))
+    print("| Size (max):", np.max(sizes))
     return sizes
 
 
@@ -39,21 +39,32 @@ def discard_small_chunks(chunks: 'list[Chunk]', min_size: int=3):
         else:
             discarded += chunk.ingroup
     
+    print("Discarded", len(discarded), "sequences in chunks with size <=", str(min_size) + ".")
     return new_chunks, discarded
 
 class UniteData:
     '''Imports and holds data from a UNITE release'''
 
-    def __init__(self, fasta_path, taxon_path):
+    def __init__(self, fasta_path: str, taxon_path: str, length_tolerance: float=0.2):
         
+        print('Importing UNITE data...')
         # READING SEQUENCE DATA
-        sequences = []
+        seq_lengths = [] # First, read lengths
         for record in SeqIO.parse(fasta_path, "fasta"):
-            sequences.append(record)
-        self.sequences = sequences
+            seq_lengths.append(len(record.seq))
+        median = np.median(seq_lengths) # Grab median (instead of mean (outliers))
 
-        taxon_data = open(taxon_path)
-        taxon_data = taxon_data.readlines()
+        # Only add sequences that are within the tolerated length
+        sequences, indices, discarded_sequences = [], [], []
+        for i, record in enumerate(SeqIO.parse(fasta_path, "fasta")):
+            if seq_lengths[i] < (1+length_tolerance)*median and seq_lengths[i] > (1-length_tolerance)*median:
+                sequences.append(record)
+                indices.append(i)
+            else:
+                discarded_sequences.append(record)
+
+        taxon_data = open(taxon_path).readlines()
+        taxon_data = [taxon_data[i] for i in indices]
         taxonomies = []
         taxon_tree = {}
 
@@ -76,8 +87,13 @@ class UniteData:
                     view_level = view_level[rank]
             taxonomies.append(taxonomy[:-1])
 
+        # STORING ALL ATTRIBUTES
+        self.sequences = sequences
         self.taxon_tree = taxon_tree
         self.taxonomies = taxonomies
+        self.indices = indices
+        self.discarded_sequences = discarded_sequences
+        print(len(self.indices), "out of", len(seq_lengths), "sequences imported.")
 
     
     def json_taxon_tree(self):
@@ -130,7 +146,7 @@ class UniteData:
                 else: # If not or not provided, add chunk to chunks
                     name = ''
                     for arg in args: # Add taxonomic info for each element in chunk
-                        name += arg + ' '
+                        name += arg + '_'
                     name += rank
                     chunks[name] = chunk
 
@@ -141,6 +157,7 @@ class UniteData:
         '''Creates fasta file with seq data for each chunk.
         Taxonomy==True will include taxonomy in fasta headers.'''
 
+        representatives = []
         for chunk in chunks:
             seqs = []
             for seq_index in chunk.ingroup:
@@ -154,10 +171,28 @@ class UniteData:
                     sequence = self.get_seq_tax(seq_index)
                 else:
                     sequence = self.sequences[seq_index]
-                sequence.id = "OUTGROUP_" + sequence.id
-                sequence.description = ""
+                # sequence = SeqIO.SeqRecord(sequence.seq, id="OUTGROUP_" + sequence.id, description="")
+                sequence = SeqIO.SeqRecord(sequence.seq, id="OUTGROUP", description="")
                 seqs.append(sequence)
-            SeqIO.write(seqs, "results/chunks/" + str(len(chunk.ingroup)) + " " + chunk.name + ".fasta", "fasta")
+            SeqIO.write(seqs, "results/chunks/" + str(len(chunk.ingroup)) + "_" + chunk.name + ".fasta", "fasta")
+            if len(chunk.representatives) > 0:
+                for seq_index in chunk.representatives:
+                    if taxonomy:
+                        sequence = self.get_seq_tax(seq_index, exclude_tax=chunk.name)
+                    else:
+                        sequence = self.sequences[seq_index]
+                    sequence = SeqIO.SeqRecord(sequence.seq, id=chunk.name + "_" + sequence.id, description="")
+                    representatives.append(sequence)
+        SeqIO.write(representatives, "results/chunks/representatives.fasta", "fasta")
+
+
+    def export_discarded_seqs(self, discarded_indices: 'list[int]'=[]):
+        '''Dumps discarded sequences to a fasta file.'''
+
+        seqs = self.discarded_sequences.copy()
+        for index in discarded_indices:
+            seqs.append(self.sequences[index])
+        SeqIO.write(seqs, "results/discarded.fasta", "fasta")
 
         
     def get_chunk_data(self, *args: str) -> 'list[str]':
