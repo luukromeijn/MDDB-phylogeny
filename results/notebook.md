@@ -225,4 +225,4 @@ After picking 2 representatives for each chunk, a high-level alignment has been 
 
 ![evalwmetric](10-5-2022/Ascomycota_high_level.png)
 The tree, zoomed in.
-![evalgoogle](10-5-2022/Ascomycota_high_level_tree_zoomed_in.png.png)
+![evalgoogle](10-5-2022/Ascomycota_high_level_tree_zoomed_in.png)
