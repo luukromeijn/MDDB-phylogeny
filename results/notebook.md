@@ -226,3 +226,14 @@ After picking 2 representatives for each chunk, a high-level alignment has been 
 ![evalwmetric](10-5-2022/Ascomycota_high_level.png)
 The tree, zoomed in.
 ![evalgoogle](10-5-2022/Ascomycota_high_level_tree_zoomed_in.png)
+
+# 11-5-2022
+Fixed a bug in `determine_representatives`, which was causing SH's to appear as representatives for chunks that they weren't part of. Profile-profile alignment on muscle doesn't seem to be supported anymore, so we tried aligning each of the 2 representatives with each other first, before aligning them all together. No noticeable difference between that approach and just aligning them all together at once. The resulting high-level phylogeny does look very promising. The alignment isn't amazing, but the representatives stick together which is nice. 
+
+![alignment](11-5-2022/double_alignment.png)
+
+![tree](11-5-2022/double_alignment_tree.png)
+
+![forks](11-5-2022/double_alignment_zoom_on_forks.png)
+
+The root for each fork can be replaced with the subtree of that chunk. We noticed one fork that seemed incorrect.

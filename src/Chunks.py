@@ -157,7 +157,6 @@ class UniteData:
         '''Creates fasta file with seq data for each chunk.
         Taxonomy==True will include taxonomy in fasta headers.'''
 
-        representatives = []
         for chunk in chunks:
             seqs = []
             for seq_index in chunk.ingroup:
@@ -175,6 +174,7 @@ class UniteData:
                 sequence = SeqIO.SeqRecord(sequence.seq, id="OUTGROUP", description="")
                 seqs.append(sequence)
             SeqIO.write(seqs, "results/chunks/" + str(len(chunk.ingroup)) + "_" + chunk.name + ".fasta", "fasta")
+            seqs = []
             if len(chunk.representatives) > 0:
                 for seq_index in chunk.representatives:
                     if taxonomy:
@@ -182,8 +182,8 @@ class UniteData:
                     else:
                         sequence = self.sequences[seq_index]
                     sequence = SeqIO.SeqRecord(sequence.seq, id=chunk.name + "_" + sequence.id, description="")
-                    representatives.append(sequence)
-        SeqIO.write(representatives, "results/chunks/representatives.fasta", "fasta")
+                    seqs.append(sequence)
+                SeqIO.write(seqs, "results/chunks/representatives/" + chunk.name + ".fasta", "fasta")
 
 
     def export_discarded_seqs(self, discarded_indices: 'list[int]'=[]):

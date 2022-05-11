@@ -90,7 +90,7 @@ class PairwiseDistance:
                 avg_dist = np.average(self.matrix[sequence, chunk.ingroup])
                 avg_distances.append(avg_dist)
             sorted = np.argsort(avg_distances)[:n]
-            chunk.representatives = [seq for seq in sorted]
+            chunk.representatives = [chunk.ingroup[index] for index in sorted]
 
         print("Chunks representatives determined.")
         return chunks
