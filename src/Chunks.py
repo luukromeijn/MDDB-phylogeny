@@ -5,7 +5,8 @@ import json
 class Chunk:
     '''Sequence data for a phylogenetic (sub)tree'''
 
-    def __init__(self, name: str, ingroup: list, outgroup: list=[], representatives: list=[]):
+    def __init__(self, id: str, name: str, ingroup: list, outgroup: list=[], representatives: list=[]):
+        self.id = id
         self.name = name
         self.ingroup = ingroup
         self.outgroup = outgroup
@@ -76,7 +77,7 @@ class UniteData:
             taxonomy = ''
             for i in range(1,len(record)): # Loop through ranks
                 rank = record[i][3:] # Remove headers
-                taxonomy += rank + ' '
+                taxonomy += rank + '_'
                 # Add to current view if unidentified or deepest level reached
                 if rank == 'unidentified' or i == 6: # Append index for easy seq retrieval
                     view_level.setdefault(rank, []).append(n)
@@ -121,10 +122,13 @@ class UniteData:
         # Calling the recursive function
         ingroups = self.__create_chunks_recursive(self.taxon_tree, min_depth-1, max_depth-1, max_size=max_size)
 
+        id = 1
+        digits = len(str(len(ingroups)))
         chunks = []
         for name in ingroups:
             ingroups[name].sort()
-            chunks.append(Chunk(name, ingroups[name]))
+            chunks.append(Chunk(str(id).zfill(digits), name, ingroups[name]))
+            id += 1
             
         return chunks
 
@@ -153,11 +157,25 @@ class UniteData:
         return chunks
 
 
-    def chunks_to_fasta(self, chunks, taxonomy=False):
+    def representatives_to_fasta(self, chunks):
+        '''Creates one fasta file with all chunk representatives.'''
+
+        representatives = []
+        for chunk in chunks:
+            for seq_index in chunk.representatives:
+                sequence = self.sequences[seq_index]
+                sequence = SeqIO.SeqRecord(sequence.seq, id=chunk.id + "_" + sequence.id, description="")
+                representatives.append(sequence)
+        SeqIO.write(representatives, "results/supertree/representatives_unaligned.fasta", "fasta")
+    
+    
+    def chunks_to_fasta(self, chunks, exclude: 'list[str]'=[], taxonomy=False):
         '''Creates fasta file with seq data for each chunk.
         Taxonomy==True will include taxonomy in fasta headers.'''
 
         for chunk in chunks:
+            if chunk.id in exclude:
+                continue
             seqs = []
             for seq_index in chunk.ingroup:
                 if taxonomy:
@@ -170,20 +188,9 @@ class UniteData:
                     sequence = self.get_seq_tax(seq_index)
                 else:
                     sequence = self.sequences[seq_index]
-                # sequence = SeqIO.SeqRecord(sequence.seq, id="OUTGROUP_" + sequence.id, description="")
                 sequence = SeqIO.SeqRecord(sequence.seq, id="OUTGROUP", description="")
                 seqs.append(sequence)
-            SeqIO.write(seqs, "results/chunks/" + str(len(chunk.ingroup)) + "_" + chunk.name + ".fasta", "fasta")
-            seqs = []
-            if len(chunk.representatives) > 0:
-                for seq_index in chunk.representatives:
-                    if taxonomy:
-                        sequence = self.get_seq_tax(seq_index, exclude_tax=chunk.name)
-                    else:
-                        sequence = self.sequences[seq_index]
-                    sequence = SeqIO.SeqRecord(sequence.seq, id=chunk.name + "_" + sequence.id, description="")
-                    seqs.append(sequence)
-                SeqIO.write(seqs, "results/chunks/representatives/" + chunk.name + ".fasta", "fasta")
+            SeqIO.write(seqs, "results/chunks/unaligned/" + chunk.id + "_" + str(len(chunk.ingroup)) + "_" + chunk.name + ".fasta", "fasta")
 
 
     def export_discarded_seqs(self, discarded_indices: 'list[int]'=[]):
@@ -193,6 +200,23 @@ class UniteData:
         for index in discarded_indices:
             seqs.append(self.sequences[index])
         SeqIO.write(seqs, "results/discarded.fasta", "fasta")
+
+
+    def get_seq_index(self, seq_name: str):
+        '''Returns sequence index based on its name (id).'''
+
+        index = None
+        for i in range(len(self.sequences)):
+            if self.sequences[i].id == seq_name:
+                if index is None:
+                    index = i
+                else:
+                    raise RuntimeWarning("Multiple sequences with id", seq_name)
+        
+        if index is None:
+            raise ValueError("No sequence with id", seq_name)
+        else:
+            return index
 
         
     def get_chunk_data(self, *args: str) -> 'list[str]':
@@ -231,7 +255,7 @@ class UniteData:
         taxonomy = self.taxonomies[index]
         taxonomy = taxonomy.replace(exclude_tax, '')
         taxonomy = taxonomy.strip()
-        sequence.id = taxonomy
+        sequence.id = taxonomy + "_" + str(index)
         sequence.description = ""
 
         return sequence
