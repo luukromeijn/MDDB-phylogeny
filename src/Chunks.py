@@ -1,4 +1,4 @@
-from Bio import SeqIO
+from Bio import SeqIO, Phylo
 import numpy as np
 import json
 
@@ -179,13 +179,13 @@ class UniteData:
             seqs = []
             for seq_index in chunk.ingroup:
                 if taxonomy:
-                    sequence = self.get_seq_tax(seq_index, exclude_tax=chunk.name)
+                    sequence = self.index_to_tax(seq_index, exclude_tax=chunk.name)
                 else:
                     sequence = self.sequences[seq_index]
                 seqs.append(sequence)
             for seq_index in chunk.outgroup:
                 if taxonomy:
-                    sequence = self.get_seq_tax(seq_index)
+                    sequence = self.index_to_tax(seq_index)
                 else:
                     sequence = self.sequences[seq_index]
                 sequence = SeqIO.SeqRecord(sequence.seq, id="OUTGROUP", description="")
@@ -200,23 +200,6 @@ class UniteData:
         for index in discarded_indices:
             seqs.append(self.sequences[index])
         SeqIO.write(seqs, "results/discarded.fasta", "fasta")
-
-
-    def get_seq_index(self, seq_name: str):
-        '''Returns sequence index based on its name (id).'''
-
-        index = None
-        for i in range(len(self.sequences)):
-            if self.sequences[i].id == seq_name:
-                if index is None:
-                    index = i
-                else:
-                    raise RuntimeWarning("Multiple sequences with id", seq_name)
-        
-        if index is None:
-            raise ValueError("No sequence with id", seq_name)
-        else:
-            return index
 
         
     def get_chunk_data(self, *args: str) -> 'list[str]':
@@ -248,7 +231,7 @@ class UniteData:
             return shs
 
 
-    def get_seq_tax(self, index: int, exclude_tax: str=''):
+    def index_to_tax(self, index: int, exclude_tax: str=''):
         '''Returns sequence and taxonomy based on index'''
 
         sequence = self.sequences[index]
@@ -259,3 +242,45 @@ class UniteData:
         sequence.description = ""
 
         return sequence
+
+
+    def name_to_index(self, seq_name: str):
+        '''Returns sequence index based on its name (id).'''
+
+        index = None
+        for i in range(len(self.sequences)):
+            if self.sequences[i].id == seq_name:
+                if index is None:
+                    index = i
+                else:
+                    raise RuntimeWarning("Multiple sequences with id", seq_name)
+        
+        if index is None:
+            raise ValueError("No sequence with id", seq_name)
+        else:
+            return index
+
+    
+    def name_to_tax(self, seq_name: str):
+        '''Returns sequence taxonomy based on its name (id)'''
+
+        if seq_name == 'OUTGROUP':
+            return seq_name
+        index = self.name_to_index(seq_name)
+        taxonomy = self.taxonomies[index]
+
+        return taxonomy
+
+    
+    def sh_to_tax_tree(self, tree, exclude_tax: str=""):
+        '''Replaces SH leafs in a Bio.Phylo tree with corresponding taxonomy'''
+
+        for leaf in tree.get_terminals(): #TODO remove try-except
+            try:
+                taxonomy = self.name_to_tax(leaf.name)
+                leaf.name = taxonomy.replace(exclude_tax, '')
+                print("Worked")
+            except ValueError:
+                pass
+
+        return tree

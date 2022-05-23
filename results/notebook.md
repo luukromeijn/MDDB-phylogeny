@@ -237,3 +237,16 @@ Fixed a bug in `determine_representatives`, which was causing SH's to appear as 
 ![forks](11-5-2022/double_alignment_zoom_on_forks.png)
 
 The root for each fork can be replaced with the subtree of that chunk. We noticed one fork that seemed incorrect.
+
+# 23-5-2022
+The first version of the backbone was produced and can be found [here](23-5-2022/backbone.tre). 
+
+Now that we have a high-level reference tree, we use that in `RepresentativesTree.determine_outgroup(...)` to select the outgroups instead of using the distance measure for this. We were able to calculate all subtrees within two hours of running time, time logs can be found [here](23-5-2022/time_logs.txt). Everything is now separated into three scripts: `divide_data.py`, `build_subtrees.py`, and `build_supertree.py`. 
+
+Fixing the non-matching forks using the grouping constraint `-g` of raxml currently doesn't go as planned. Running the Python code gives an error, running directly in command line results in only 2 of the 10 non-matching forks fixed (see: [here](23-5-2022/constrained_representatives_tree.tre)). Below in red are the leaves that are not good monophyletic forks:
+
+![forks](23-5-2022/red_no_fork.png)
+
+Leaves of trees SH names can now be converted to their corresponding taxonomy. 
+
+There is a big difference between splitting on order and on family. This is noticeable in the 'Agaricales' order. Splitting on order results in only sequences of roughly the same rank (probably due to the high strictness). Maybe the strictness should be lower than 2. 

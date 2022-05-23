@@ -121,7 +121,7 @@ class RepresentativesTree:
                     min = dist
                     outgroup = "_".join(sister.name.split("_")[1:])
                     
-        return [unite_data.get_seq_index(outgroup)]
+        return [unite_data.name_to_index(outgroup)]
 
 
 class Backbone:
@@ -165,7 +165,7 @@ class Backbone:
                             for sh in same_id:
                                 sh.name = "_".join(sh.name.split("_")[1:])
                     else: # If not monophyletic, just remove the chunk id
-                        print('Representatives', id, 'not monophyletic.')
+                        print('Found non-monophyletic representatives.') #TODO index doesn't seem right
                         for sh in same_id:
                             sh.name = "_".join(sh.name.split("_")[1:])
             

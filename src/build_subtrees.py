@@ -5,18 +5,18 @@ from Bio import Phylo
 from Bio.Phylo.Applications import RaxmlCommandline
 from Bio.Align.Applications import MafftCommandline
 
-# TODO clean up this script a bit
-
 mafft_path = "bin/mafft"
 raxml_path = "raxml/raxmlHPC-PTHREADS-SSE3"
 chunk_paths = os.listdir("results/chunks/unaligned")
 
+# Sorting on size
 sizes = []
 for filename in chunk_paths:
     size = int(filename.split('_')[1])
     sizes.append(size)
-
 index_sorted = np.argsort(sizes)
+
+# Alignments
 i = 1
 print("Aligning", len(index_sorted), "chunks...")
 for index in index_sorted:
@@ -29,6 +29,7 @@ for index in index_sorted:
     print("|", i, "    ", t1-t0, "seconds")
     i += 1
 
+# Tree generation
 i = 1
 print("Generating", len(index_sorted), "subtrees...") #TODO find out where the 'reduced' files come from
 for index in index_sorted:
