@@ -8,13 +8,14 @@ from alfpy import wmetric
 from alfpy import word_pattern
 from alfpy import word_vector
 from alfpy import word_distance
+from alfpy.utils import distmatrix
 import os
 import glob
 from tqdm import tqdm
 
-# kmer_raxml_tree = Phylo.read('Reference_tree.newick', 'newick')
+# kmer_raxml_tree = Phylo.read('single_alignment.tre', 'newick')
 # Phylo.draw(kmer_raxml_tree)
-# # print("through raxml")
+# print("through raxml")
 # test_tree = Phylo.read('20p_distance_OTU_tree.newick', 'newick')
 # Phylo.draw(test_tree)
 # print("kmer ref tree")
@@ -38,32 +39,40 @@ def find_names(ancestor, names):
 
 def write_to_fasta(childs, records):
     new_file = open('new_file.fasta', 'w')
-    new_file.write(">" + records.id_list[-1] + "\n" + records.seq_list[-1] + "\n")
     for child in childs:
         sequence = records.seq_list[records.id_list.index(child)]
         new_file.write(">" + child + "\n" + sequence + "\n")
+    new_file.write(">" + records.id_list[-1] + "\n" + records.seq_list[-1] + "\n")
     new_file.close()
 
 def write_to_fasta_again(childs, records, extra):
     new_file = open('new_file.fasta', 'w')
-    new_file.write(">" + extra + "\n" + records.seq_list[records.id_list.index(extra)] + "\n")
     for child in childs:
         sequence = records.seq_list[records.id_list.index(child)]
         new_file.write(">" + child + "\n" + sequence + "\n")
+    new_file.write(">" + extra + "\n" + records.seq_list[records.id_list.index(extra)] + "\n")
     new_file.close()
 
-def create_subtree(ancestor):
+def create_subtree(ancestor, outgroups):
     # TRYING TO GET MAFFT AND RAXML TO WORK FROM WITHIN PYTHON BY CALLING COMMANDLINE
     mafft_exe = "mafft-win\mafft.bat"
     in_file = "new_file.fasta"
-    mafft_cline = MafftCommandline(mafft_exe, input=in_file)
+    mafft_cline = MafftCommandline(mafft_exe, input=in_file, inputorder = False) #, adjustdirection=True
     stdout, stderr = mafft_cline()
     with open("aligned.fasta", "w") as handle:
         handle.write(stdout)
     raxml_exe = "raxmlHPC-PTHREADS-SSE3.exe"
-    raxml_cline = RaxmlCommandline(raxml_exe, sequences="aligned.fasta", model="GTRGAMMA", name="new_tree")
+    constraint = "constraint.newick"
+    outgroups_string = ','.join(outgroups)
+    if len(outgroups):
+        raxml_cline = RaxmlCommandline(raxml_exe, sequences="aligned.fasta", binary_constraint=constraint, outgroup=outgroups_string, model="GTRCAT", name="new_tree")#, binary_constraint=constraint
+    else:
+        raxml_cline = RaxmlCommandline(raxml_exe, sequences="aligned.fasta", binary_constraint=constraint, model="GTRCAT", name="new_tree")#, binary_constraint=constraint
     output, error = raxml_cline()
     new_subtree = Phylo.read('RAxML_bestTree.new_tree', 'newick')
+    # new_ancestor = new_subtree.common_ancestor(outgroups)
+    for outgroup in outgroups:
+        new_subtree.prune(outgroup)
     new_clade = new_subtree.root
     ancestor.clades = new_clade.clades
     ancestor.name = new_clade.name
@@ -72,77 +81,115 @@ def create_subtree(ancestor):
     for f in files:
         os.remove(f)
 
+def reversal():
+    fasta_sequences = SeqIO.parse(open('Unknown_ITS.fasta'),'fasta')
+    with open('new_unknown.fasta', 'w') as out_file:
+        for fasta in fasta_sequences:
+            name, sequence = fasta.id, str(fasta.seq)
+            out_file.write('>' + name + '\n')
+            new_sequence = sequence[::-1]
+            out_file.write(new_sequence + '\n')
+
+def get_outgroups(ancestor, tree):
+    path = tree.get_path(ancestor)
+    if len(path):
+        outgroup_parent = tree.from_clade(path[-3])
+        ancestor_childs = [terminal.name for terminal in ancestor.get_terminals()]
+        terminals = [terminal.name for terminal in outgroup_parent.get_terminals() if terminal.name not in ancestor_childs]
+        for target in terminals[2:]:
+            outgroup_parent.prune(target)
+        return terminals[:2], outgroup_parent
+    else:
+        return [], tree
+
 def update_tree():
-    # ref_tree = Phylo.read('Reference_tree.newick', 'newick')
-    ref_tree = Phylo.read('RAxML_bestTree.partly_tree.tre', 'newick')
-    # test_tree = Phylo.read('new_ref_tree.newick', 'newick')
+    ref_tree = Phylo.read('single_alignment.tre', 'newick')
+    # ref_tree = Phylo.read('RAxML_bestTree.partly_tree.tre', 'newick')
+    # test_tree = Phylo.read('Reference_tree.newick', 'newick')
 
     # matrix = subsmat.get('blosum62')
-    unknown = open('Reference_ITS.fasta')
+    # unknown = open('new_unknown.fasta')
+    unknown = open('876_Ascomycota_Leotiomycetes_Helotiales.fasta')
     unknown_records = seqrecords.read_fasta(unknown)
     unknown.close()
-    fh = open('partly_fi1cons.fasta')
+    fh = open('all_in_one_unaligned.fasta')
     seq_records = seqrecords.read_fasta(fh)
     fh.close()
-    skipped = []
+    count = 0
+    avg_amount = 0
+    avg_childs = 0
     for x in tqdm(range(unknown_records.count)):
         if unknown_records.seq_list[x] not in seq_records.seq_list:
+            count += 1
+            distances = []
             seq_records.add(unknown_records.id_list[x], unknown_records.seq_list[x])
             pattern = word_pattern.create(seq_records.seq_list, word_size=6)
             counts = word_vector.Counts(seq_records.length_list, pattern)
             dist = word_distance.Distance(counts, 'google')
-            # dist = wmetric.Distance(seq_records, matrix)
-            distances = []
             for y in range(seq_records.count-1):
                 distances.append((seq_records.id_list[y], dist.pairwise_distance(y, seq_records.count-1)))
             sorted_distances = sorted(distances, key = lambda i: i[1])
-            best_distances = [sorted_distances[x][0] for x in range(len(sorted_distances)) if sorted_distances[x][1] <= 1.1*sorted_distances[0][1]]
-            print(unknown_records.id_list[x], best_distances)
-            if len(best_distances) > 2:
-                extra_seqs = []
-                for skipped_seq in skipped:
-                    if skipped_seq in best_distances:
-                        extra_seqs.append(skipped_seq)
-                        best_distances.remove(skipped_seq)
-                for extra in extra_seqs:
-                    skipped.remove(extra)
+            # print(sorted_distances)
+            best_distances = [sorted_distances[x][0] for x in range(len(sorted_distances)) if sorted_distances[x][1] <= 1.025*sorted_distances[0][1]]
+            # print(best_distances)
+            if len(best_distances): # > 2
+                avg_amount += len(best_distances)
+                # print(1/0)
+                # extra_seqs = []
+                # for skipped_seq in skipped:
+                #     if skipped_seq in best_distances:
+                #         extra_seqs.append(skipped_seq)
+                #         best_distances.remove(skipped_seq)
+                # for extra in extra_seqs:
+                #     skipped.remove(extra)
                 ancestor = ref_tree.common_ancestor(best_distances)
+                outgroups, constraint = get_outgroups(ancestor, ref_tree)
+                # print(outgroups)
+                # Phylo.draw(constraint)
+                Phylo.write(constraint, 'constraint.newick', 'newick')
                 child_names = []
                 if len(ancestor.clades) == 0:
                     child_names.append(ancestor.name)
                 else:
                     find_names(ancestor, child_names)
-                child_names.extend(extra_seqs)
+                child_names.extend(outgroups)
+                avg_childs += len(child_names)
+                # child_names.extend(extra_seqs)
                 write_to_fasta(child_names, seq_records)
-                create_subtree(ancestor)
+                create_subtree(ancestor, outgroups)
                 # Phylo.draw(ref_tree)
-            else:
-                skipped.append(unknown_records.id_list[x])
+            # else:
+            #     skipped.append(unknown_records.id_list[x])
         else:
             print('Zit er al in')
-    if skipped:
-        print(len(skipped))
-        for skip in skipped:
-            names = [terminal.name for terminal in ref_tree.get_terminals()]
-            if skip not in names:
-                new_distances = []
-                for a in range(seq_records.count):
-                    new_distances.append((seq_records.id_list[a], dist.pairwise_distance(a, seq_records.id_list.index(skip))))
-                new_sorted_distances = sorted(new_distances, key = lambda i: i[1])[1:4]
-                best_new_dist = [new_sorted_distances[x][0] for x in range(len(new_sorted_distances))]
-                extra_seqs = []
-                for skipped_seq in skipped:
-                    if skipped_seq in best_new_dist:
-                        extra_seqs.append(skipped_seq)
-                        best_new_dist.remove(skipped_seq)
-                ancestor = ref_tree.common_ancestor(best_new_dist)
-                child_names = []
-                find_names(ancestor, child_names)
-                child_names.extend(extra_seqs)
-                write_to_fasta_again(child_names, seq_records, skip)
-                #BUILD SUBTREE
-                create_subtree(ancestor)
-    Phylo.write(ref_tree, 'test_fi1cons_tree.newick', 'newick')
+            # pass
+    # if skipped:
+    #     print(len(skipped))
+    #     for skip in tqdm(skipped):
+    #         names = [terminal.name for terminal in ref_tree.get_terminals()]
+    #         if skip not in names:
+    #             new_distances = []
+    #             for a in range(seq_records.count):
+    #                 new_distances.append((seq_records.id_list[a], dist.pairwise_distance(a, seq_records.id_list.index(skip))))
+    #             new_sorted_distances = sorted(new_distances, key = lambda i: i[1])[1:4]
+    #             best_new_dist = [new_sorted_distances[x][0] for x in range(len(new_sorted_distances))]
+    #             extra_seqs = []
+    #             for skipped_seq in skipped:
+    #                 if skipped_seq in best_new_dist:
+    #                     extra_seqs.append(skipped_seq)
+    #                     best_new_dist.remove(skipped_seq)
+    #             ancestor = ref_tree.common_ancestor(best_new_dist)
+    #             child_names = []
+    #             find_names(ancestor, child_names)
+    #             child_names.extend(extra_seqs)
+    #             write_to_fasta_again(child_names, seq_records, skip)
+    #             #BUILD SUBTREE
+    #             create_subtree(ancestor)
+    print(avg_amount/count)
+    print(avg_childs/count)
+    Phylo.write(ref_tree, 'backbone_plus_Ascomycota_Leotiomycetes_Helotiales.newick', 'newick')
     Phylo.draw(ref_tree)
 
-# update_tree()
+update_tree()
+# create_subtree()
+# reversal()
