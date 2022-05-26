@@ -250,3 +250,24 @@ Fixing the non-matching forks using the grouping constraint `-g` of raxml curren
 Leaves of trees SH names can now be converted to their corresponding taxonomy. 
 
 There is a big difference between splitting on order and on family. This is noticeable in the 'Agaricales' order. Splitting on order results in only sequences of roughly the same rank (probably due to the high strictness). Maybe the strictness should be lower than 2. 
+
+# 26-5-2022
+The grouping constraint for forcing the representatives in the representatives tree to form the forks is now fixed. The grouping constraint that is used contains ALL representatives, such that no new non-matching forks can occur as a result of a constraint. There is still the question of how to root this representatives tree, but the `root_at_midpoint` from `Bio.Phylo` at least ensures that all the forks form well. 
+
+We found out that the UNITE database apparently contains some duplicate sequences, some of which interestingly enough even have slightly different taxonomic identifications. A function was written to remove these duplicates. Since this requires looping over the entire distance matrix and thus is very slow, we saved the indices of these sequences so that we can just delete them by index.
+
+A new method `grouping_value` was written, which is meant to estimate the quality of a given backbone tree. While the 'truth' of a phylogenetic tree may never really be determined, we may be able to use the provided taxonomies as indication for how well the tree formation goes. The method counts clades that are monophyletic for a taxonomic identification, relative to the number of unique taxonomies that we have in total. The lower this value is, the better the taxonomies are grouped together. E.g.:
+
+    ((A,A),(B,B))   2 groups, 2 taxons => grouping value = 1
+    ((A,B),(B,B))   3 groups, 2 taxons => grouping value = 1.5
+    ((A,B),(A,B))   4 groups, 2 taxons => grouping value = 2
+    ((A,A,C),(B,B)) 3 groups, 3 taxons => grouping value = 1
+
+The aim is to use this grouping value as a direction to steer the parameter values on.
+
+New representatives selection methods were written, with the goal of possibly having a more accurate branch length towards the midpoint of the forks formed by the representatives. How well the forks form with these new method has still to be tested.
+* Select the two sequences in a chunk that have the largest distance to each other
+* Select the n sequences in a chunk that have the smallest distance to the entire matrix
+
+For big groups with many similar sequences in them, outliers may not be outliers.
+

@@ -1,5 +1,5 @@
 import glob, os
-from Bio import Phylo
+from Bio import Phylo, SeqIO
 from Bio.Align.Applications import MafftCommandline
 from Bio.Phylo.Applications import RaxmlCommandline
 from Chunks import Chunk, UniteData
@@ -10,14 +10,66 @@ def remove_outgroup(tree):
             tree.prune(clade)
     return tree
 
+class Supertree:
+    '''Base class for backbone/representatives tree, containing overlapping methods'''
+    
+    def __init__(self):
+        self.tree = None # Just for syntax
+    
+    def grouping_value(self):
+        '''Calculates the grouping value for a given tree.
+        Describes the number of monophyletic taxonomy groups,
+        divided by the number of taxonomies that are present.'''
 
-class RepresentativesTree:
+        all_taxons = set() # Get unique taxonomies
+        for leaf in self.tree.get_terminals():
+            all_taxons.add(leaf.name)
+        
+        # Call recursive function
+        count = self.__recursive_grouping_value(self.tree.root)
+        if type(count) == str: # If string, taxon is unique
+            count = 1
+        return count/len(all_taxons)
+
+
+    def __recursive_grouping_value(self, clade):
+        '''Recursive call of grouping value,
+        Returns number of monophyletic taxonomic groups,
+        Or the name of the group if this number is 1'''
+
+        name = ""
+        count = 0
+        for subclade in clade.clades: # Loop through children
+            if len(subclade.clades) == 0: # If terminal
+                if name != subclade.name: # And name is new
+                    count += 1 # Add count
+                    name = subclade.name # Save name
+            else: # Go deeper in recursion if not terminal
+                next = self.__recursive_grouping_value(subclade)
+                if type(next) == str: # If string, taxon is unique
+                    if next != name:
+                        count += 1 # If name is new, add and save
+                        name = next
+                else: # If int, add that value
+                    count += next
+
+        if count == 1:
+            return name
+        else:
+            return count
+
+
+    def show(self):
+        Phylo.draw(self.tree)
+
+
+class RepresentativesTree(Supertree):
     '''Generates/loads supertree based on chunk representatives,
     allows operating on this supertree.'''
 
-    def __init__(self, path: str, mafft_path: str="bin/mafft", raxml_path: str="raxml/raxmlHPC-PTHREADS-SSE3"):
+    def __init__(self, path: str, mafft_path: str="bin/mafft", raxml_path: str="raxml/raxmlHPC-PTHREADS-SSE3", dir: str="", n_representatives: int=2, constrained: bool=True):
         
-        # TODO improve the path handling and everything related to that
+        # TODO improve file handling
         try:
             self.tree = Phylo.read(path, 'newick')
         except FileNotFoundError:
@@ -25,19 +77,42 @@ class RepresentativesTree:
             print("Calculating tree based on representatives...")
 
             print("| Aligning...")
-            mafft = MafftCommandline(mafft_path, input="results/supertree/representatives_unaligned.fasta")
+            mafft = MafftCommandline(mafft_path, input=dir+"supertree/representatives_unaligned.fasta")
             stdout, sterr = mafft()
-            with open("results/supertree/representatives_aligned.fasta", "w") as handle:
+            with open(dir + "supertree/representatives_aligned.fasta", "w") as handle:
                 handle.write(stdout)
 
             print("| Tree generation...")
-            raxml = RaxmlCommandline(raxml_path, threads=8, sequences="results/supertree/representatives_aligned.fasta", model="GTRCAT", name="representatives_tree")
+            if constrained:
+                # Generating the constraint file (constraining all representative pairs)
+                i = 0
+                constraint = "("
+                for seq in SeqIO.parse(dir + "supertree/representatives_aligned.fasta", 'fasta'):
+                    if i == 0:
+                        constraint += "("
+                    constraint += seq.id + ","
+                    i += 1
+                    if i == n_representatives:
+                        constraint = constraint[:-1] + "),"
+                        i = 0
+                constraint = constraint[:-1] + ");"
+                file = open(dir + "supertree/constraint.tre", 'w')
+                file.write(constraint)
+                # Calling raxml
+                raxml = RaxmlCommandline(raxml_path, threads=8, sequences=dir+"supertree/representatives_aligned.fasta", 
+                grouping_constraint = dir + "supertree/constraint.tre", model="GTRCAT", name="representatives_tree")
+            else:
+                raxml = RaxmlCommandline(raxml_path, threads=8, sequences=dir+"supertree/representatives_aligned.fasta", 
+                model="GTRCAT", name="representatives_tree")
+
             raxml()
             self.tree = Phylo.read('RAxML_bestTree.representatives_tree', 'newick')
-            Phylo.write(self.tree, 'results/supertree/representatives_tree.tre', 'newick')
             files = glob.glob('*representatives_tree')
             for f in files:
                 os.remove(f)
+
+            self.tree.root_at_midpoint()
+            Phylo.write(self.tree, dir + 'supertree/representatives_tree.tre', 'newick')
         
         self.mafft_path = mafft_path
         self.raxml_path = raxml_path
@@ -57,50 +132,9 @@ class RepresentativesTree:
         for same_id in matched_by_id:
             if len(same_id) > 0:
                 if not self.tree.is_monophyletic(same_id):
-                    # for id in same_id:
-                    #     id.color = 'red'
                     not_matching.append([id.name for id in same_id])
 
         return not_matching
-
-
-    def fix_non_matching_forks(self): # TODO not working atm
-        '''Regenerates the representatives tree, 
-        placing a grouping constraint on the non-matching forks.'''
-
-        not_matching = self.find_non_matching_forks()
-
-        if len(not_matching) > 0:
-            constraints = ""
-            for same_id in not_matching:
-                new_constraint = "("
-                for sh in same_id:
-                    new_constraint += sh + ","
-                constraints += "," + new_constraint[:-1] + ")"
-            constraints = "(" + constraints[1:] + ");"
-            file = open("results/supertree/constraint.tre", "w")
-            file.write(constraints)
-
-            print("Regenerating supertree, constraining", len(not_matching), "non-matching forks...")
-
-            raxml = RaxmlCommandline(self.raxml_path, threads=8, 
-            sequences="results/supertree/representatives_aligned.fasta", 
-            model="GTRCAT", grouping_constraint="results/supertree/constraint.tre", 
-            name="constrained_representatives_tree")
-
-            raxml() #TODO There is an error here
-            
-            tree = Phylo.read('RAxML_bestTree.' + "constrained_representatives_tree", 'newick')
-            Phylo.write(tree, 'results/supertree/' + "constrained_representatives_tree.tre", 'newick')
-            files = glob.glob('*' + "constrained_representatives_tree")
-            for f in files:
-                os.remove(f)
-
-            not_matching = self.find_non_matching_forks()
-            if len(not_matching) > 0:
-                raise RuntimeError("Couldn't fix", len(not_matching), "forks.")
-            else:
-                print("Regeneration with constraints done.")
 
 
     def determine_outgroup(self, chunk: Chunk, unite_data: UniteData) -> Chunk:
@@ -124,7 +158,7 @@ class RepresentativesTree:
         return [unite_data.name_to_index(outgroup)]
 
 
-class Backbone:
+class Backbone(Supertree):
     '''Generates/loads/allows operating on backbone tree based on a chunk division'''
 
     def __init__(self, path: str=None, representatives_tree: RepresentativesTree=None):
@@ -165,7 +199,7 @@ class Backbone:
                             for sh in same_id:
                                 sh.name = "_".join(sh.name.split("_")[1:])
                     else: # If not monophyletic, just remove the chunk id
-                        print('Found non-monophyletic representatives.') #TODO index doesn't seem right
+                        print('Found non-monophyletic representatives.')
                         for sh in same_id:
                             sh.name = "_".join(sh.name.split("_")[1:])
             
@@ -173,8 +207,4 @@ class Backbone:
             Phylo.write(tree, 'results/supertree/backbone.tre', 'newick')
         else:
             raise ValueError("Please provide a path to an existing backbone or a representatives tree to generate one from.")
-
-    
-    def show(self):
-        Phylo.draw(self.tree)
         

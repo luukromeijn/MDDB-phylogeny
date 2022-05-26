@@ -94,6 +94,36 @@ class PairwiseDistance:
 
         print("Chunks representatives determined.")
         return chunks
+        
+
+    #TODO rename
+    def new_determine_representatives(self, chunks: 'list[Chunk]') -> 'list[Chunk]':
+        '''Selects two maximally distant sequences as representatives for the chunk'''
+
+        for chunk in chunks:
+            argmax = np.argmax(self.matrix[chunk.ingroup][:,chunk.ingroup])
+            index_1 = int(argmax/len(chunk.ingroup))
+            index_2 = argmax - index_1*len(chunk.ingroup)
+            chunk.representatives = [chunk.ingroup[index_1], chunk.ingroup[index_2]]
+
+        print("Chunks representatives determined.")
+        return chunks
+
+
+    # TODO rename
+    def new_new_determine_representatives(self, chunks: 'list[Chunk]', n: int) -> 'list[Chunk]':
+        '''Selects which n sequences are most average to the entire database'''
+
+        for chunk in chunks:
+            avg_distances = []
+            for sequence in chunk.ingroup:
+                avg_dist = np.average(self.matrix[sequence])
+                avg_distances.append(avg_dist)
+            sorted = np.argsort(avg_distances)[:n]
+            chunk.representatives = [chunk.ingroup[index] for index in sorted]
+
+        print("Chunks representatives determined.")
+        return chunks
 
 
     def multiple_distance(self, sequences: 'list[int]'):
@@ -140,6 +170,24 @@ class PairwiseDistance:
 
         print("Discarded", len(discarded), "sequences based on their distance to their ingroup.")
         return chunks, discarded
+
+
+    def discard_sequence_duplicates(self, chunks: 'list[Chunk]'):
+        '''Removes duplicate sequences from chunks'''
+
+        #TODO change this to whatever format is handy
+        duplicate_indices = []
+        for i in range(self.matrix.shape[0]):
+            print(i)
+            for j in range(i+1, self.matrix.shape[0]):
+                if self.matrix[i,j] == 0:
+                    duplicate_indices.append(j)
+
+        file = open("duplicate_indices", "w")
+        file.write(str(duplicate_indices))
+        return duplicate_indices
+
+        return chunks
 
 
     def flat_to_square(self, flat_matrix: np.ndarray) -> np.ndarray:

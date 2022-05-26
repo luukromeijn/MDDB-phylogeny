@@ -1,9 +1,11 @@
 from Supertree import Backbone, RepresentativesTree
 
-# Generating the tree #TODO saving the entire file still doesn't work
-rep_tree = RepresentativesTree('results/supertree/representatives_tree.tre')
-backbone = Backbone(representatives_tree=rep_tree)
+result_dir = 'results/s3_lt0.2_str2/'
+
+# Generating the tree
+# rep_tree = RepresentativesTree(result_dir + 'supertree/representatives_tree.tre')
+# backbone = Backbone(representatives_tree=rep_tree)
 
 # Displaying the tree (local device only)
-# backbone = Backbone('src/backbone_with_taxon.tre')
-# backbone.show()
+backbone = Backbone('1672taxa_290genes_bb_1.treefile')
+backbone.show()

@@ -157,7 +157,7 @@ class UniteData:
         return chunks
 
 
-    def representatives_to_fasta(self, chunks):
+    def representatives_to_fasta(self, chunks, dir: str=""):
         '''Creates one fasta file with all chunk representatives.'''
 
         representatives = []
@@ -166,10 +166,10 @@ class UniteData:
                 sequence = self.sequences[seq_index]
                 sequence = SeqIO.SeqRecord(sequence.seq, id=chunk.id + "_" + sequence.id, description="")
                 representatives.append(sequence)
-        SeqIO.write(representatives, "results/supertree/representatives_unaligned.fasta", "fasta")
+        SeqIO.write(representatives, dir + "supertree/representatives_unaligned.fasta", "fasta")
     
     
-    def chunks_to_fasta(self, chunks, exclude: 'list[str]'=[], taxonomy=False):
+    def chunks_to_fasta(self, chunks, exclude: 'list[str]'=[], taxonomy=False, dir: str=""):
         '''Creates fasta file with seq data for each chunk.
         Taxonomy==True will include taxonomy in fasta headers.'''
 
@@ -190,16 +190,16 @@ class UniteData:
                     sequence = self.sequences[seq_index]
                 sequence = SeqIO.SeqRecord(sequence.seq, id="OUTGROUP", description="")
                 seqs.append(sequence)
-            SeqIO.write(seqs, "results/chunks/unaligned/" + chunk.id + "_" + str(len(chunk.ingroup)) + "_" + chunk.name + ".fasta", "fasta")
+            SeqIO.write(seqs, dir + "chunks/unaligned/" + chunk.id + "_" + str(len(chunk.ingroup)) + "_" + chunk.name + ".fasta", "fasta")
 
 
-    def export_discarded_seqs(self, discarded_indices: 'list[int]'=[]):
+    def export_discarded_seqs(self, discarded_indices: 'list[int]'=[], dir: str=""):
         '''Dumps discarded sequences to a fasta file.'''
 
         seqs = self.discarded_sequences.copy()
         for index in discarded_indices:
             seqs.append(self.sequences[index])
-        SeqIO.write(seqs, "results/discarded.fasta", "fasta")
+        SeqIO.write(seqs, dir + "discarded.fasta", "fasta")
 
         
     def get_chunk_data(self, *args: str) -> 'list[str]':
@@ -275,12 +275,12 @@ class UniteData:
     def sh_to_tax_tree(self, tree, exclude_tax: str=""):
         '''Replaces SH leafs in a Bio.Phylo tree with corresponding taxonomy'''
 
-        for leaf in tree.get_terminals(): #TODO remove try-except
+        for leaf in tree.get_terminals():
             try:
                 taxonomy = self.name_to_tax(leaf.name)
                 leaf.name = taxonomy.replace(exclude_tax, '')
-                print("Worked")
             except ValueError:
+                print("Didn't work for this leaf.")
                 pass
 
         return tree
