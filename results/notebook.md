@@ -269,5 +269,96 @@ New representatives selection methods were written, with the goal of possibly ha
 * Select the two sequences in a chunk that have the largest distance to each other
 * Select the n sequences in a chunk that have the smallest distance to the entire matrix
 
-For big groups with many similar sequences in them, outliers may not be outliers.
+# 14-6-2022
+New grouping analysis method: just counting the number of non-matching terminals. This was done since the earlier method caused mistakes to backpropagate throughout the recursion, making values worser than they actually are. Now that we have a good evaluation measure, we evaluated the different representatives selection methods.
 
+Method 1 (most average sequences in and to ingroup): 
+
+    Found 9 non-matching forks.
+    Average distance to preterminals in representatives tree: 0.807760488372093
+
+    | Rank:     Non-matching leaves:   Unique ranks:
+    | Phylum:   0                      16
+    | Class:    1                      50
+    | Order:    4                      180
+    | Family:   13                     198
+    | Genus:    39                     218
+    | Species:  88                     237
+
+Method 2 (most distant sequences to each other in ingroup):
+
+    Found 117 non-matching forks.
+    Average distance to preterminals in representatives tree: 0.6796505116279067
+
+    | Rank:     Non-matching leaves:   Unique ranks:
+    | Phylum:   6                      16
+    | Class:    30                     50
+    | Order:    107                    180
+    | Family:   125                    232
+    | Genus:    130                    276
+    | Species:  93                     228
+
+Method 2, constrained:
+
+    Found 0 non-matching forks.
+    Average distance to preterminals in representatives tree: 0.6796505116279067
+
+    | Rank:     Non-matching leaves:   Unique ranks:
+    | Phylum:   0                      16
+    | Class:    0                      50
+    | Order:    0                      180
+    | Family:   41                     232
+    | Genus:    95                     276
+    | Species:  73                     228
+
+Method 3 (sequences in ingroup most average to entire dataset):
+
+    Found 38 non-matching forks.
+    Average distance to preterminals in representatives tree: 0.9674875581395348
+
+    | Rank:     Non-matching leaves:   Unique ranks:
+    | Phylum:   0                      16
+    | Class:    3                      50
+    | Order:    26                     180
+    | Family:   36                     208
+    | Genus:    50                     222
+    | Species:  77                     220
+
+For the entire tree (this is basically method 1 constrained):
+
+    Tree has 15593 leaves.
+    | Rank:     Non-matching leaves:   Unique ranks:
+    | Phylum:   1                      16
+    | Class:    2                      50
+    | Order:    4                      180
+    | Family:   438                    427
+    | Genus:    1182                   1899
+    | Species:  3560                   6679
+
+Method 2 is the best theoretically founded choice, and also happens to be the most accurate when constrained. When not constrained, it is a bit messy. 
+
+It was discovered that using l-nsi-i as MAFFT algorithm leads to a slightly better performance. For the *russulales* chunk, the scores are shown below:
+
+Using the FFT method:
+
+    Tree has 412 leaves.
+    | Rank:     Non-matching leaves:   Unique ranks:
+    | Phylum:   0                      1
+    | Class:    0                      1
+    | Order:    0                      1
+    | Family:   0                      1
+    | Genus:    8                      4
+    | Species:  55                     140
+
+Using l-nsi-i:
+
+    Tree has 412 leaves.
+    | Rank:     Non-matching leaves:   Unique ranks:
+    | Phylum:   0                      1
+    | Class:    0                      1
+    | Order:    0                      1
+    | Family:   0                      1
+    | Genus:    6                      4
+    | Species:  54                     140
+
+The significance of these differences remains up to discussion. The improvement is quite easily visible in the tree, as there was a lactifluus/lactarius genus mismatch. The l-nsi-i method is quite slow compared to the fft method, but literature also says that its more accurate. 

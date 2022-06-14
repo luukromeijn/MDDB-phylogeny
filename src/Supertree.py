@@ -1,4 +1,5 @@
 import glob, os
+from tokenize import group
 from Bio import Phylo, SeqIO
 from Bio.Align.Applications import MafftCommandline
 from Bio.Phylo.Applications import RaxmlCommandline
@@ -15,48 +16,89 @@ class Supertree:
     
     def __init__(self):
         self.tree = None # Just for syntax
+
     
-    def grouping_value(self):
-        '''Calculates the grouping value for a given tree.
-        Describes the number of monophyletic taxonomy groups,
-        divided by the number of taxonomies that are present.'''
+    def grouping_report(self, data: UniteData):
+        '''Shows info about how well the taxon ranks have been grouped'''
+
+        print("Tree has", len(self.tree.get_terminals()), "leaves.")
+        tax_tree = data.sh_to_tax_tree(self.tree)
+        print("| " + "Rank:".ljust(10) + "Non-matching leaves:".ljust(23) + "Unique ranks:")
+        for i in range(1,7):
+            self.grouping_report_per_rank(tax_tree, i)
+
+    
+    def grouping_report_per_rank(self, tree, rank: int=6):
+        '''Shows info about how well a specified taxon rank has been grouped.
+        The tree must contain taxonomic information.'''
 
         all_taxons = set() # Get unique taxonomies
-        for leaf in self.tree.get_terminals():
-            all_taxons.add(leaf.name)
+        for leaf in tree.get_terminals():
+            taxon = self.__name_until_rank(leaf.name, rank)
+            if taxon[-12:] != "unidentified" and taxon[-8:] != "OUTGROUP":
+                all_taxons.add(taxon)
         
-        # Call recursive function
-        count = self.__recursive_grouping_value(self.tree.root)
-        if type(count) == str: # If string, taxon is unique
-            count = 1
-        return count/len(all_taxons)
+        # Get non-matching terminals
+        non_matching = self.__non_matching_leaf_names(tree.root, rank)
+
+        ranks = ["Phylum", "Class", "Order", "Family", "Genus", "Species"]
+        print("|", (ranks[rank-1] + ":").ljust(10) + str(non_matching).ljust(23) + str(len(all_taxons)))
 
 
-    def __recursive_grouping_value(self, clade):
+    def __non_matching_leaf_names(self, clade, rank):
         '''Recursive call of grouping value,
-        Returns number of monophyletic taxonomic groups,
-        Or the name of the group if this number is 1'''
+        Returns number of non-matching terminals'''
 
-        name = ""
         count = 0
-        for subclade in clade.clades: # Loop through children
-            if len(subclade.clades) == 0: # If terminal
-                if name != subclade.name: # And name is new
-                    count += 1 # Add count
-                    name = subclade.name # Save name
-            else: # Go deeper in recursion if not terminal
-                next = self.__recursive_grouping_value(subclade)
-                if type(next) == str: # If string, taxon is unique
-                    if next != name:
-                        count += 1 # If name is new, add and save
-                        name = next
-                else: # If int, add that value
-                    count += next
+        child_1 = clade.clades[0]
+        child_2 = clade.clades[1]
 
-        if count == 1:
-            return name
+        # If both non-terminal, look deeper
+        if len(child_1.clades) > 0 and len(child_2.clades) > 0: 
+            count += self.__non_matching_leaf_names(child_1, rank)
+            count += self.__non_matching_leaf_names(child_2, rank)
+
+        # If both terminal, check match
+        elif len(child_1.clades) == 0 and len(child_2.clades) == 0:
+            name_1 = self.__name_until_rank(child_1.name, rank)
+            name_2 = self.__name_until_rank(child_2.name, rank)
+            # Skips clades with unidentified or outgroup leaves
+            if name_1 != name_2 and (name_1[-12:] != 'unidentified' and name_1[-8:] != 'OUTGROUP' and
+            name_2[-12:] != 'unidentified' and name_2[-8:] != 'OUTGROUP'):
+                count += 1
+        
+        # If one terminal, compare it to the next deeper level
         else:
-            return count
+            if len(child_1.clades) == 0 and len(child_2.clades) > 0:
+                name_x = self.__name_until_rank(child_1.name, rank)
+                count += self.__non_matching_leaf_names(child_2, rank)
+                children_y = child_2.clades
+            elif len(child_2.clades) == 0 and len(child_1.clades) > 0:
+                name_x = self.__name_until_rank(child_2.name, rank)
+                count += self.__non_matching_leaf_names(child_1, rank)
+                children_y = child_1.clades
+            match = False
+            if name_x[-12:] == 'unidentified' or name_x[-8:] == 'OUTGROUP':
+                match = True
+            for subchild in children_y:
+                subname = self.__name_until_rank(subchild.name, rank)
+                if subname == name_x:
+                    match = True
+            if ((children_y[0].name is None and children_y[1].name is None) or 
+            (str(children_y[0].name)[-12:] == 'unidentified' and str(children_y[1].name)[-12:] == 'unidentified')):
+                match = True
+            if not match:
+                count += 1
+
+        return count
+
+
+    def __name_until_rank(self, name, rank):
+        if name is None:
+            return ''
+        else:
+            split_on = ['_c__', '_o__', '_f__', '_g__', '_s__', '_x__']
+            return name.split(split_on[rank-1])[0]
 
 
     def show(self):
@@ -122,11 +164,15 @@ class RepresentativesTree(Supertree):
     def find_non_matching_forks(self):
         '''Finds forks in supertree that do not match.'''
 
+        distance = 0
         terminals = self.tree.get_terminals()
         matched_by_id = [[] for i in range(len(terminals))]
         for terminal in terminals:
             id = int(terminal.name.split('_')[0])-1
             matched_by_id[id].append(terminal)
+            preterminal = self.tree.get_path(terminal)[-2]
+            distance += self.tree.distance(self.tree.root, preterminal)
+        distance = distance/len(terminals)
 
         not_matching = []
         for same_id in matched_by_id:
@@ -134,6 +180,8 @@ class RepresentativesTree(Supertree):
                 if not self.tree.is_monophyletic(same_id):
                     not_matching.append([id.name for id in same_id])
 
+        print("Found", len(not_matching), "non-matching forks.")
+        print("Average distance to preterminals in representatives tree:", distance)
         return not_matching
 
 

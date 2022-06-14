@@ -76,16 +76,15 @@ class UniteData:
             view_level = taxon_tree # How 'deep' we look in the tree, initialized at full tree
             taxonomy = ''
             for i in range(1,len(record)): # Loop through ranks
-                rank = record[i][3:] # Remove headers
-                taxonomy += rank + '_'
+                taxonomy += record[i] + '_'
                 # Add to current view if unidentified or deepest level reached
-                if rank == 'unidentified' or i == 6: # Append index for easy seq retrieval
-                    view_level.setdefault(rank, []).append(n)
+                if record[3:] == 'unidentified' or i == 6: # Append index for easy seq retrieval
+                    view_level.setdefault(record[i], []).append(n)
                     break
                 # If not, view deeper into the tree
                 else:
-                    view_level.setdefault(rank, {})
-                    view_level = view_level[rank]
+                    view_level.setdefault(record[i], {})
+                    view_level = view_level[record[i]]
             taxonomies.append(taxonomy[:-1])
 
         # STORING ALL ATTRIBUTES
@@ -139,7 +138,7 @@ class UniteData:
 
         chunks = {}
         for rank in tree: # Loop through child nodes of tree
-            if rank == 'unidentified': # Skip if unidentified
+            if rank[3:] == 'unidentified': # Skip if unidentified
                 continue
             chunk = self.get_chunk_data(*args, rank) # Get the data
             if min_depth > 0: # Search further into tree if min depth not reached
@@ -173,24 +172,27 @@ class UniteData:
         '''Creates fasta file with seq data for each chunk.
         Taxonomy==True will include taxonomy in fasta headers.'''
 
+        all_seqs = []
         for chunk in chunks:
             if chunk.id in exclude:
                 continue
-            seqs = []
+            chunk_seqs = []
             for seq_index in chunk.ingroup:
                 if taxonomy:
                     sequence = self.index_to_tax(seq_index, exclude_tax=chunk.name)
                 else:
                     sequence = self.sequences[seq_index]
-                seqs.append(sequence)
+                chunk_seqs.append(sequence)
+                all_seqs.append(sequence)
             for seq_index in chunk.outgroup:
                 if taxonomy:
                     sequence = self.index_to_tax(seq_index)
                 else:
                     sequence = self.sequences[seq_index]
                 sequence = SeqIO.SeqRecord(sequence.seq, id="OUTGROUP", description="")
-                seqs.append(sequence)
-            SeqIO.write(seqs, dir + "chunks/unaligned/" + chunk.id + "_" + str(len(chunk.ingroup)) + "_" + chunk.name + ".fasta", "fasta")
+                chunk_seqs.append(sequence)
+            SeqIO.write(chunk_seqs, dir + "chunks/unaligned/" + chunk.id + "_" + str(len(chunk.ingroup)) + "_" + chunk.name + ".fasta", "fasta")
+        SeqIO.write(all_seqs, dir + "supertree/backbone.fasta", 'fasta')
 
 
     def export_discarded_seqs(self, discarded_indices: 'list[int]'=[], dir: str=""):

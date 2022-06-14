@@ -1,10 +1,10 @@
 import os
 from Chunks import Chunk, chunk_size_report, discard_small_chunks, UniteData
 from DistanceData import PairwiseDistance
-from Supertree import RepresentativesTree
+from Supertree import Backbone, RepresentativesTree
 
 # Downloaded from https://doi.org/10.15156/BIO/1264708
-result_dir = 'results/new_testing/'
+result_dir = 'results/repr_method_2_const/'
 fasta_path = 'data/sh_qiime_release_10.05.2021/sh_refs_qiime_ver8_97_10.05.2021.fasta'
 taxon_path = 'data/sh_qiime_release_10.05.2021/sh_taxonomy_qiime_ver8_97_10.05.2021.txt'
 matrix_file_path = 'data/pw_distances_6mergoogle.npy'
@@ -38,7 +38,7 @@ chunk_size_report(chunks)
 # print(distances.evaluate(chunks))
 
 # Determining chunk representatives
-chunks = distances.new_determine_representatives(chunks, 2)
+chunks = distances.determine_representatives(chunks)
 data.representatives_to_fasta(chunks, dir=result_dir)
 
 # Generating supertree from chunk representatives

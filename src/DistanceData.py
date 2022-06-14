@@ -81,7 +81,16 @@ class PairwiseDistance:
         return outgroup
 
 
-    def determine_representatives(self, chunks: 'list[Chunk]', n: int) -> 'list[Chunk]':
+    def determine_representatives(self, chunks: 'list[Chunk]', algorithm: int=0, n: int=2) -> 'list[Chunk]':
+        '''Determines chunk representatives using specified algorithm (default = most average seqs)'''
+
+        algorithms = [self.repr_most_average_sequences, 
+        self.repr_most_distant_sequences, self.repr_most_average_overall]
+
+        return algorithms[algorithm](chunks, n)
+
+
+    def repr_most_average_sequences(self, chunks: 'list[Chunk]', n: int) -> 'list[Chunk]':
         '''Selects which n sequences best represent their chunk'''
 
         for chunk in chunks:
@@ -96,8 +105,7 @@ class PairwiseDistance:
         return chunks
         
 
-    #TODO rename
-    def new_determine_representatives(self, chunks: 'list[Chunk]') -> 'list[Chunk]':
+    def repr_most_distant_sequences(self, chunks: 'list[Chunk]', dummy_variable=None) -> 'list[Chunk]':
         '''Selects two maximally distant sequences as representatives for the chunk'''
 
         for chunk in chunks:
@@ -111,7 +119,7 @@ class PairwiseDistance:
 
 
     # TODO rename
-    def new_new_determine_representatives(self, chunks: 'list[Chunk]', n: int) -> 'list[Chunk]':
+    def repr_most_average_overall(self, chunks: 'list[Chunk]', n: int) -> 'list[Chunk]':
         '''Selects which n sequences are most average to the entire database'''
 
         for chunk in chunks:
