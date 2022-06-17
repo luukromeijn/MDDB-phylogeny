@@ -1,4 +1,4 @@
-from Bio import SeqIO, Phylo
+from Bio import SeqIO
 import numpy as np
 import json
 
@@ -106,7 +106,8 @@ class UniteData:
     def create_chunks(self, min_depth: int, max_depth: int=None, max_size: int=None) -> 'list[Chunk]':
         '''Divides data into subgroups based on level in taxonomy rank.
         Splits on min_depth level, except for chunks bigger than max_size. 
-        Those are splitted up further until max_depth level.'''
+        Those are splitted up further until max_depth level.
+        '''
 
         # Some checks
         max_depth = max_depth if max_depth is not None else min_depth
@@ -119,7 +120,7 @@ class UniteData:
 
 
         # Calling the recursive function
-        ingroups = self.__create_chunks_recursive(self.taxon_tree, min_depth-1, max_depth-1, max_size=max_size)
+        ingroups, discarded = self.__create_chunks_recursive(self.taxon_tree, min_depth-1, max_depth-1, max_size=max_size)
 
         id = 1
         digits = len(str(len(ingroups)))
@@ -129,7 +130,7 @@ class UniteData:
             chunks.append(Chunk(str(id).zfill(digits), name, ingroups[name]))
             id += 1
             
-        return chunks
+        return chunks, discarded
 
     def __create_chunks_recursive(self, tree: dict, min_depth: int, max_depth, *args: str, max_size: int=None) -> dict:
         '''Divides (sub)tree into subgroups until depth==0.
@@ -137,15 +138,21 @@ class UniteData:
         *args: list of taxonomic rank corresponding to current subtree.'''
 
         chunks = {}
+        discarded = []
         for rank in tree: # Loop through child nodes of tree
-            if rank[3:] == 'unidentified': # Skip if unidentified
-                continue
             chunk = self.get_chunk_data(*args, rank) # Get the data
+            if rank[3:] == 'unidentified': # Skip if unidentified
+                discarded += chunk
+                continue
             if min_depth > 0: # Search further into tree if min depth not reached
-                chunks = {**chunks, **self.__create_chunks_recursive(tree[rank], min_depth-1, max_depth-1, *args, rank, max_size=max_size)}
+                recursive = self.__create_chunks_recursive(tree[rank], min_depth-1, max_depth-1, *args, rank, max_size=max_size)
+                discarded += recursive[1]
+                chunks = {**chunks, **recursive[0]}
             else:
                 if max_size is not None and len(chunk) > max_size and max_depth > 0: # Search deeper if max_size exceeded and max_depth is not
-                    chunks = {**chunks, **self.__create_chunks_recursive(tree[rank], min_depth-1, max_depth-1, *args, rank, max_size=max_size)}
+                    recursive = self.__create_chunks_recursive(tree[rank], min_depth-1, max_depth-1, *args, rank, max_size=max_size)
+                    discarded += recursive[1]
+                    chunks = {**chunks, **recursive[0]}
                 else: # If not or not provided, add chunk to chunks
                     name = ''
                     for arg in args: # Add taxonomic info for each element in chunk
@@ -153,7 +160,7 @@ class UniteData:
                     name += rank
                     chunks[name] = chunk
 
-        return chunks
+        return chunks, discarded
 
 
     def representatives_to_fasta(self, chunks, dir: str=""):
@@ -165,14 +172,19 @@ class UniteData:
                 sequence = self.sequences[seq_index]
                 sequence = SeqIO.SeqRecord(sequence.seq, id=chunk.id + "_" + sequence.id, description="")
                 representatives.append(sequence)
+        
+        # outgroup = SeqIO.read(outgroup_path, 'fasta')
+        # outgroup = SeqIO.SeqRecord(outgroup.seq, id="OUTGROUP", description="")
+        # representatives.append(outgroup)
+
         SeqIO.write(representatives, dir + "supertree/representatives_unaligned.fasta", "fasta")
     
     
-    def chunks_to_fasta(self, chunks, exclude: 'list[str]'=[], taxonomy=False, dir: str=""):
+    def chunks_to_fasta(self, chunks, exclude: 'list[str]'=[], taxonomy=False, dir: str="", outgroup_path: str=""):
         '''Creates fasta file with seq data for each chunk.
         Taxonomy==True will include taxonomy in fasta headers.'''
 
-        all_seqs = []
+        all_seqs = [] #TODO not all seqs?
         for chunk in chunks:
             if chunk.id in exclude:
                 continue
@@ -185,6 +197,8 @@ class UniteData:
                 chunk_seqs.append(sequence)
                 all_seqs.append(sequence)
             for seq_index in chunk.outgroup:
+                if seq_index == -1:
+                    sequence = SeqIO.read(outgroup_path, 'fasta')
                 if taxonomy:
                     sequence = self.index_to_tax(seq_index)
                 else:
@@ -194,14 +208,65 @@ class UniteData:
             SeqIO.write(chunk_seqs, dir + "chunks/unaligned/" + chunk.id + "_" + str(len(chunk.ingroup)) + "_" + chunk.name + ".fasta", "fasta")
         SeqIO.write(all_seqs, dir + "supertree/backbone.fasta", 'fasta')
 
+    
+    def export_constraint_tree(self, chunks: 'list[Chunk]', full_constraint: bool=False, dir:str=""):
+        '''Creates a .tre constraint file for the representatives tree'''
 
-    def export_discarded_seqs(self, discarded_indices: 'list[int]'=[], dir: str=""):
+        if full_constraint:
+            constrained_tree = {}
+            for chunk in chunks:
+                view_level = constrained_tree
+                for i in range(1,7):
+                    taxon_ranks = chunk.name.split("__")
+                    if i < len(taxon_ranks)-1:
+                        view_level.setdefault(taxon_ranks[i][:-2], {})
+                        view_level = view_level[taxon_ranks[i][:-2]]
+                    else:
+                        view_level[taxon_ranks[i]] = chunk
+                        break
+            constraint = self.__constraint_tree_recursive(constrained_tree) + ";"
+        else:
+            i = 0
+            constraint = "("
+            for chunk in chunks:
+                constraint += "("
+                for representative in chunk.representatives:
+                    constraint += chunk.id + "_" + self.sequences[representative].id + ","
+                constraint = constraint[:-1] + '),'
+            constraint = constraint[:-1] + ");"
+
+        file = open(dir + "supertree/constraint.tre", 'w')
+        file.write(constraint)
+
+    
+    def __constraint_tree_recursive(self, tree: dict):
+
+        tree_string = ""
+        for node in tree:
+            if type(tree[node]) == dict:
+                tree_string += self.__constraint_tree_recursive(tree[node]) + ","
+            else:
+                tree_string += "("
+                for representative in tree[node].representatives:
+                    tree_string += tree[node].id + "_" + self.sequences[representative].id + ","
+                tree_string = tree_string[:-1] + "),"
+
+        if len(tree) > 1:
+            return "(" + tree_string[:-1] + ")"
+        else:
+            return tree_string[:-1]
+
+    
+    def export_discarded_seqs(self, discarded_indices: 'list[list[int]]'=[[]], filenames:'list[str]'=[], dir: str=""):
         '''Dumps discarded sequences to a fasta file.'''
 
-        seqs = self.discarded_sequences.copy()
-        for index in discarded_indices:
-            seqs.append(self.sequences[index])
-        SeqIO.write(seqs, dir + "discarded.fasta", "fasta")
+        SeqIO.write(self.discarded_sequences, dir + 'discarded/short_or_long.fasta', 'fasta')
+
+        for i in range(len(discarded_indices)):
+            seqs = []
+            for index in discarded_indices[i]:
+                seqs.append(self.sequences[index])
+            SeqIO.write(seqs, dir + "discarded/" + filenames[i] + ".fasta", "fasta")
 
         
     def get_chunk_data(self, *args: str) -> 'list[str]':
@@ -249,6 +314,9 @@ class UniteData:
     def name_to_index(self, seq_name: str):
         '''Returns sequence index based on its name (id).'''
 
+        if seq_name == "OUTGROUP":
+            return -1
+
         index = None
         for i in range(len(self.sequences)):
             if self.sequences[i].id == seq_name:
@@ -279,8 +347,9 @@ class UniteData:
 
         for leaf in tree.get_terminals():
             try:
-                taxonomy = self.name_to_tax(leaf.name)
-                leaf.name = taxonomy.replace(exclude_tax, '')
+                if leaf.name != "OUTGROUP":
+                    taxonomy = self.name_to_tax(leaf.name)
+                    leaf.name = taxonomy.replace(exclude_tax, '')
             except ValueError:
                 print("Didn't work for this leaf.")
                 pass

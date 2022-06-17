@@ -362,3 +362,17 @@ Using l-nsi-i:
     | Species:  54                     140
 
 The significance of these differences remains up to discussion. The improvement is quite easily visible in the tree, as there was a lactifluus/lactarius genus mismatch. The l-nsi-i method is quite slow compared to the fft method, but literature also says that its more accurate. 
+
+# 17-6-2022
+Changes/findings:
+* Further experimented with the l-nsi-i method. The alignments get a bit longer, indicating they might be worse than with the fft method. They may still be closer to the truth, which is why we will also generate the trees using this approach and then compare using the `grouping_value`. 
+* Unidentified sequences are now also added to the list of discarded sequences (to be added in the expansion part), which now also gets exported for later use. Since the reason for discarding in-/decreases the likelihood that these sequences will fit in the tree some place, the discarded sequences are exported to their own files.
+* An alternative chunk division option would be to take into account the average (variation in) distances within the ingroup of a chunk. If its above a certain threshold, split further.  
+* It is now optional to constrain on ALL taxonomic ranks from the representatives tree (e.g. such that sequences from the same phylum are also constrained instead of only sequences from the same chunk). This heavily relies on the assumption that the UNITE taxonomy is correct. However, we already assume that their classes/families (depending on what we split on) are correct so its sensible to split on the higher levels as well. 
+* Fasta file containing all data present in the final output (the backbone tree) is also exported now.
+* Experimented with picking an outgroup for the representativs tree. Somehow, RaxML places this outgroup within the tree, and the sequences seem to match up with one of the clades of the represntatives tree, rather than being a 'natural' outgroup. Rooting on this outgroup then leads to a tree that doesn't group the phylums/classes etc. together. Also see figures below. This was tried for three SH's, of which two are the following:
+    * SH3686448.08FU_LR890126_reps (Metazoa, upper figure).
+    * SH2599929.08FU_EU280909_reps (Lower figure)
+
+![metazoa](17-6-2022/MetazoaNematodaChromadoreaRhabditidaAphelenchoididaeCryptaphelenchus.png)
+![outgrouptoentiretree](17-6-2022/outgrouptoentiretree.png)

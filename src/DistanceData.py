@@ -180,10 +180,9 @@ class PairwiseDistance:
         return chunks, discarded
 
 
-    def discard_sequence_duplicates(self, chunks: 'list[Chunk]'):
-        '''Removes duplicate sequences from chunks'''
+    def determine_duplicates(self, dir:str=""):
+        '''Returns and exports an array containing indices of duplicate sequences'''
 
-        #TODO change this to whatever format is handy
         duplicate_indices = []
         for i in range(self.matrix.shape[0]):
             print(i)
@@ -191,11 +190,10 @@ class PairwiseDistance:
                 if self.matrix[i,j] == 0:
                     duplicate_indices.append(j)
 
-        file = open("duplicate_indices", "w")
-        file.write(str(duplicate_indices))
-        return duplicate_indices
+        duplicate_indices = np.array(duplicate_indices)
+        np.save(dir + "duplicate_indices", duplicate_indices)
 
-        return chunks
+        return duplicate_indices
 
 
     def flat_to_square(self, flat_matrix: np.ndarray) -> np.ndarray:

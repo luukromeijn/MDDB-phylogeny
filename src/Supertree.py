@@ -1,5 +1,4 @@
-import glob, os
-from tokenize import group
+import glob, os, time
 from Bio import Phylo, SeqIO
 from Bio.Align.Applications import MafftCommandline
 from Bio.Phylo.Applications import RaxmlCommandline
@@ -109,9 +108,9 @@ class RepresentativesTree(Supertree):
     '''Generates/loads supertree based on chunk representatives,
     allows operating on this supertree.'''
 
-    def __init__(self, path: str, mafft_path: str="bin/mafft", raxml_path: str="raxml/raxmlHPC-PTHREADS-SSE3", dir: str="", n_representatives: int=2, constrained: bool=True):
+    def __init__(self, path: str, mafft_path: str="bin/mafft", raxml_path: str="raxml/raxmlHPC-PTHREADS-SSE3", dir: str="", localpair: bool=False, n_representatives: int=2, constrained: bool=True):
         
-        # TODO improve file handling
+        start = time.time()
         try:
             self.tree = Phylo.read(path, 'newick')
         except FileNotFoundError:
@@ -119,27 +118,13 @@ class RepresentativesTree(Supertree):
             print("Calculating tree based on representatives...")
 
             print("| Aligning...")
-            mafft = MafftCommandline(mafft_path, input=dir+"supertree/representatives_unaligned.fasta")
+            mafft = MafftCommandline(mafft_path, localpair=localpair, input=dir+"supertree/representatives_unaligned.fasta")
             stdout, sterr = mafft()
             with open(dir + "supertree/representatives_aligned.fasta", "w") as handle:
                 handle.write(stdout)
 
             print("| Tree generation...")
             if constrained:
-                # Generating the constraint file (constraining all representative pairs)
-                i = 0
-                constraint = "("
-                for seq in SeqIO.parse(dir + "supertree/representatives_aligned.fasta", 'fasta'):
-                    if i == 0:
-                        constraint += "("
-                    constraint += seq.id + ","
-                    i += 1
-                    if i == n_representatives:
-                        constraint = constraint[:-1] + "),"
-                        i = 0
-                constraint = constraint[:-1] + ");"
-                file = open(dir + "supertree/constraint.tre", 'w')
-                file.write(constraint)
                 # Calling raxml
                 raxml = RaxmlCommandline(raxml_path, threads=8, sequences=dir+"supertree/representatives_aligned.fasta", 
                 grouping_constraint = dir + "supertree/constraint.tre", model="GTRCAT", name="representatives_tree")
@@ -153,12 +138,14 @@ class RepresentativesTree(Supertree):
             for f in files:
                 os.remove(f)
 
+            Phylo.write(self.tree, dir + 'supertree/unrooted_representatives_tree.tre', 'newick')
             self.tree.root_at_midpoint()
             Phylo.write(self.tree, dir + 'supertree/representatives_tree.tre', 'newick')
         
         self.mafft_path = mafft_path
         self.raxml_path = raxml_path
-        print("Representatives tree ready.")
+        end = time.time()
+        print("Representatives tree ready in", end-start, "seconds.")
 
 
     def find_non_matching_forks(self):
@@ -168,10 +155,11 @@ class RepresentativesTree(Supertree):
         terminals = self.tree.get_terminals()
         matched_by_id = [[] for i in range(len(terminals))]
         for terminal in terminals:
-            id = int(terminal.name.split('_')[0])-1
-            matched_by_id[id].append(terminal)
-            preterminal = self.tree.get_path(terminal)[-2]
-            distance += self.tree.distance(self.tree.root, preterminal)
+            if terminal.name != "OUTGROUP":
+                id = int(terminal.name.split('_')[0])-1
+                matched_by_id[id].append(terminal)
+                preterminal = self.tree.get_path(terminal)[-2]
+                distance += self.tree.distance(self.tree.root, preterminal)
         distance = distance/len(terminals)
 
         not_matching = []
@@ -201,8 +189,11 @@ class RepresentativesTree(Supertree):
                 dist = self.tree.distance(clade, sister) 
                 if dist < min:
                     min = dist
-                    outgroup = "_".join(sister.name.split("_")[1:])
-                    
+                    if sister.name == "OUTGROUP":
+                        outgroup = "OUTGROUP"
+                    else:
+                        outgroup = "_".join(sister.name.split("_")[1:])
+
         return [unite_data.name_to_index(outgroup)]
 
 
@@ -215,6 +206,7 @@ class Backbone(Supertree):
             self.tree = Phylo.read(path, 'newick')
         elif representatives_tree is not None:
             
+            start = time.time()
             # Finding subtree files
             subtree_paths = os.listdir("results/chunks/trees")
             subtrees = {}
@@ -252,6 +244,8 @@ class Backbone(Supertree):
                             sh.name = "_".join(sh.name.split("_")[1:])
             
             self.tree = tree
+            end = time.time()
+            print("Subtrees placed in representatives tree in", end-start, "seconds.")
             Phylo.write(tree, 'results/supertree/backbone.tre', 'newick')
         else:
             raise ValueError("Please provide a path to an existing backbone or a representatives tree to generate one from.")
