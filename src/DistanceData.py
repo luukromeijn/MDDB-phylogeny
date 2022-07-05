@@ -12,7 +12,7 @@ from Chunks import Chunk
 import numpy as np
 
 class PairwiseDistance:
-    '''Calculates pairwise distances, stores in and retrieves from database'''
+    '''Calculates (with) pairwise distances'''
 
     def __init__(self, matrix_file_path='data/pw_distances.npy', indices: list=None):
         print("Loading distance matrix...")
