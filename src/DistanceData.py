@@ -1,3 +1,6 @@
+'''For calculating pairwise distances between sequences,
+and using these distances for several purposes.'''
+
 from alfpy.utils import seqrecords
 from alfpy import wmetric
 from alfpy.utils import distmatrix

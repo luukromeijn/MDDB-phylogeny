@@ -1,6 +1,7 @@
 data/sh*
 src/alfpy/*
 src/Bio*
+results/thesis results*
 data/pw_distances*
 *.pyc
 bin/mafft-7.490*

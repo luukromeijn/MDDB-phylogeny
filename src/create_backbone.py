@@ -1,3 +1,5 @@
+'''Creates a fungal phylogenetic backbone with data from UNITE.'''
+
 import os, glob, sys
 import numpy as np
 import time
@@ -11,7 +13,56 @@ from Supertree import Backbone, RepresentativesTree
 def divide_data(result_dir: str, fasta_path: str, taxon_path: str, matrix_file_path: str,
     mafft_path: str, raxml_path: str, length_tolerance: float, min_split_depth: int, 
     max_split_depth: int, max_chunk_size: int, outlier_strictness: float, representatives_alg: int, 
-    full_constraint: bool, localpair: bool, pwdist_outgroup: bool):
+    full_constraint: bool, localpair: bool):
+    """Divides a UNITE dataset into smaller chunks.
+    Builds an overarching tree containing 2 representatives for each chunk. 
+    Identifies outgroups for all chunks.
+
+    Parameters
+    ----------
+    result_dir : str
+        Path to desired output directory
+    fasta_path : str
+        Path to FASTA file with UNITE data
+    taxon_path: str
+        Path to corresponding UNITE taxonomy file
+    matrix_file_path: str
+        Path to distance matrix file
+    mafft_path: str
+        Path to mafft executable
+    raxml_path: str
+        Path to raxml executable
+    length_tolerance: float
+        Allowed factor of deviation compared to the average sequence length in UNITE.
+    min_split_depth: int
+        The data is at least split up at this taxonomy rank (1=phylum, ... , 6=species)
+    max_split_depth: int
+        The data will not be splitted beyond this taxonomy rank.
+    max_chunk_size: int
+        Size threshold for which the algorithm will split chunks further (if allowed by max_split_depth).
+    outlier_strictness: float
+        Number of standard deviations that a sequences average distance to its chunk must be lower than 
+        the average pairwise distance in the entire dataset.
+    representatives_alg: int
+        Determines which function is used to determine the chunk representatives. 
+        If 0: pick sequences most average to their chunks.
+        If 1: pick sequences most distant to each other within their chunk. 
+    full_constraint: bool
+        Constrains all taxonomic ranks in the representatives tree if set to true. 
+        Only constrains the representatives to fork if false.
+    localpair: bool
+        If true, forces the use of the l-INS-i MAFFT algorithm instead of the default FFT-NS-2.
+
+
+    Output
+    ------
+    chunks/unaligned/[...].fasta
+        FASTA file of unaligned sequence data per chunk.
+    discarded/[...].fasta
+        FASTA files with discarded sequences, grouped per reason for discarding.
+    supertree/representatives_tree.tre
+        High-level/overarching tree containing chunk representatives.
+    """
 
     # Importing data
     data = UniteData(fasta_path, taxon_path, length_tolerance=length_tolerance)
@@ -30,9 +81,6 @@ def divide_data(result_dir: str, fasta_path: str, taxon_path: str, matrix_file_p
     data.export_discarded_seqs(discarded_seqs, filenames, dir=result_dir)
     chunk_size_report(chunks)
 
-    # Evaluating the distance matrix
-    # print(distances.evaluate(chunks))
-
     # Determining chunk representatives
     chunks = distances.determine_representatives(chunks, algorithm=representatives_alg)
     data.representatives_to_fasta(chunks, dir=result_dir)
@@ -48,10 +96,10 @@ def divide_data(result_dir: str, fasta_path: str, taxon_path: str, matrix_file_p
     for i in range(len(chunks)):
         if not chunks[i].id in non_matching:
             print("|", i)
-            if pwdist_outgroup:
-                chunks[i].outgroup = distances.determine_outgroup(chunks[i], n=1) # Based on distances
-            else:
+            try:
                 chunks[i].outgroup = supertree.determine_outgroup(chunks[i], data) # Based on supertree
+            except IndexError:
+                chunks[i].outgroup = distances.determine_outgroup(chunks[i], n=1) # Fall back on distances
     t1 = time.time()
     print("Outgroups determined in", t1-t0, "seconds")
 
@@ -60,6 +108,7 @@ def divide_data(result_dir: str, fasta_path: str, taxon_path: str, matrix_file_p
 
 
 def build_subtrees(result_dir: str, mafft_path: str, raxml_path: str, localpair: bool):
+    """Generates subtrees from chunks."""
 
     chunk_paths = os.listdir(result_dir + "chunks/unaligned")
 
@@ -107,10 +156,11 @@ def build_subtrees(result_dir: str, mafft_path: str, raxml_path: str, localpair:
 
 
 def build_supertree(result_dir: str, fasta_path: str, taxon_path: str):
+    '''Inserts subtrees in representatives tree'''
 
     # Generating the tree
     rep_tree = RepresentativesTree(result_dir + 'supertree/representatives_tree.tre')
-    backbone = Backbone(representatives_tree=rep_tree)
+    backbone = Backbone(representatives_tree=rep_tree, dir=result_dir)
 
     # Grouping report
     data = UniteData(fasta_path, taxon_path,length_tolerance=1000)
@@ -118,10 +168,15 @@ def build_supertree(result_dir: str, fasta_path: str, taxon_path: str):
 
 
 def run(args: list):
+    '''Processes user input and calls upon all other functions.
+    For the generation of a UNITE backbone tree.'''
+
+    sys.setrecursionlimit(2000) # For highly nested trees
+
     start = time.time()
-    if len(sys.argv) != 10:
+    if len(sys.argv) != 9:
         print("Please provide space-separated parameter settings in the following order:")
-        print("length_tolerance min_split_depth max_split_depth max_chunk_size outlier_strictness representatives_alg full_constraint localpair pwdist_outgroup")
+        print("length_tolerance min_split_depth max_split_depth max_chunk_size outlier_strictness representatives_alg full_constraint localpair")
     else:
         # Setting variables
         fasta_path = 'data/sh_qiime_release_10.05.2021/sh_refs_qiime_ver8_97_10.05.2021.fasta'
@@ -137,7 +192,6 @@ def run(args: list):
         representatives_alg = int(args[6])
         full_constraint = bool(int(args[7]))
         localpair = bool(int(args[8]))
-        pwdist_outgroup = bool(int(args[9]))
 
         # Generating folder name
         result_dir = ("results/l" + str(length_tolerance) + "_s" + str(min_split_depth) + "_" + str(max_split_depth) + "_" 
@@ -146,8 +200,6 @@ def run(args: list):
             result_dir += "_constr"
         if localpair:
             result_dir += "_localpair"
-        if pwdist_outgroup:
-            result_dir += "_pwdistoutgroup"
         result_dir += "/"
 
         # Initializing result directory
@@ -163,7 +215,7 @@ def run(args: list):
 
         # Calling functions
         divide_data(result_dir, fasta_path, taxon_path, matrix_file_path, mafft_path, raxml_path, length_tolerance, 
-        min_split_depth, max_split_depth, max_chunk_size, outlier_strictness, representatives_alg, full_constraint, localpair, pwdist_outgroup)
+        min_split_depth, max_split_depth, max_chunk_size, outlier_strictness, representatives_alg, full_constraint, localpair)
         build_subtrees(result_dir, mafft_path, raxml_path, localpair)
         build_supertree(result_dir, fasta_path, taxon_path)
     

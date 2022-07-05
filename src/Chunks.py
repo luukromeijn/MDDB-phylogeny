@@ -1,3 +1,5 @@
+'''For handling and creating chunks based on UNITE data.'''
+
 from Bio import SeqIO
 import numpy as np
 import json

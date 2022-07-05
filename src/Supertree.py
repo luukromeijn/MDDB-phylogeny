@@ -1,3 +1,5 @@
+'''For dealing and constructing large phylogenetic trees.'''
+
 import glob, os, time
 from Bio import Phylo, SeqIO
 from Bio.Align.Applications import MafftCommandline
@@ -200,7 +202,7 @@ class RepresentativesTree(Supertree):
 class Backbone(Supertree):
     '''Generates/loads/allows operating on backbone tree based on a chunk division'''
 
-    def __init__(self, path: str=None, representatives_tree: RepresentativesTree=None):
+    def __init__(self, path: str=None, representatives_tree: RepresentativesTree=None, dir: str=""):
 
         if path is not None:
             self.tree = Phylo.read(path, 'newick')
@@ -208,7 +210,7 @@ class Backbone(Supertree):
             
             start = time.time()
             # Finding subtree files
-            subtree_paths = os.listdir("results/chunks/trees")
+            subtree_paths = os.listdir(dir + "chunks/trees")
             subtrees = {}
             for path in subtree_paths:
                 id = path.split('_')[0]
@@ -228,7 +230,7 @@ class Backbone(Supertree):
                     if tree.is_monophyletic(same_id): # Check monophyletic
                         try: # Replace representatives with subtree
                             path = subtrees[id]
-                            subtree = Phylo.read("results/chunks/trees/" + path, 'newick')
+                            subtree = Phylo.read(dir + "chunks/trees/" + path, 'newick')
                             subtree = remove_outgroup(subtree)
                             ancestor = tree.common_ancestor(same_id)
                             new_clade = subtree.root
@@ -246,7 +248,7 @@ class Backbone(Supertree):
             self.tree = tree
             end = time.time()
             print("Subtrees placed in representatives tree in", end-start, "seconds.")
-            Phylo.write(tree, 'results/supertree/backbone.tre', 'newick')
+            Phylo.write(tree, dir + 'supertree/backbone.tre', 'newick')
         else:
             raise ValueError("Please provide a path to an existing backbone or a representatives tree to generate one from.")
         
