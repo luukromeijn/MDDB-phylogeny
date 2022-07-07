@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "src/run.py", line 175, in <module>
+    run(sys.argv)
+  File "src/run.py", line 168, in run
+    build_supertree(result_dir, fasta_path, taxon_path)
+  File "src/run.py", line 113, in build_supertree
+    backbone = Backbone(representatives_tree=rep_tree)
+  File "/home/s2592800/backbone/src/Supertree.py", line 211, in __init__
+    subtree_paths = os.listdir("results/chunks/trees")
+FileNotFoundError: [Errno 2] No such file or directory: 'results/chunks/trees'
