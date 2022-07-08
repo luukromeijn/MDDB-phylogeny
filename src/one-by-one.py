@@ -107,7 +107,6 @@ def update_tree():
     # ref_tree = Phylo.read('RAxML_bestTree.partly_tree.tre', 'newick')
     # test_tree = Phylo.read('Reference_tree.newick', 'newick')
 
-    # matrix = subsmat.get('blosum62')
     # unknown = open('new_unknown.fasta')
     unknown = open('876_Ascomycota_Leotiomycetes_Helotiales.fasta')
     unknown_records = seqrecords.read_fasta(unknown)
@@ -129,23 +128,11 @@ def update_tree():
             for y in range(seq_records.count-1):
                 distances.append((seq_records.id_list[y], dist.pairwise_distance(y, seq_records.count-1)))
             sorted_distances = sorted(distances, key = lambda i: i[1])
-            # print(sorted_distances)
             best_distances = [sorted_distances[x][0] for x in range(len(sorted_distances)) if sorted_distances[x][1] <= 1.025*sorted_distances[0][1]]
-            # print(best_distances)
-            if len(best_distances): # > 2
+            if len(best_distances):
                 avg_amount += len(best_distances)
-                # print(1/0)
-                # extra_seqs = []
-                # for skipped_seq in skipped:
-                #     if skipped_seq in best_distances:
-                #         extra_seqs.append(skipped_seq)
-                #         best_distances.remove(skipped_seq)
-                # for extra in extra_seqs:
-                #     skipped.remove(extra)
                 ancestor = ref_tree.common_ancestor(best_distances)
                 outgroups, constraint = get_outgroups(ancestor, ref_tree)
-                # print(outgroups)
-                # Phylo.draw(constraint)
                 Phylo.write(constraint, 'constraint.newick', 'newick')
                 child_names = []
                 if len(ancestor.clades) == 0:
@@ -154,37 +141,11 @@ def update_tree():
                     find_names(ancestor, child_names)
                 child_names.extend(outgroups)
                 avg_childs += len(child_names)
-                # child_names.extend(extra_seqs)
                 write_to_fasta(child_names, seq_records)
                 create_subtree(ancestor, outgroups)
-                # Phylo.draw(ref_tree)
-            # else:
-            #     skipped.append(unknown_records.id_list[x])
         else:
             print('Zit er al in')
             # pass
-    # if skipped:
-    #     print(len(skipped))
-    #     for skip in tqdm(skipped):
-    #         names = [terminal.name for terminal in ref_tree.get_terminals()]
-    #         if skip not in names:
-    #             new_distances = []
-    #             for a in range(seq_records.count):
-    #                 new_distances.append((seq_records.id_list[a], dist.pairwise_distance(a, seq_records.id_list.index(skip))))
-    #             new_sorted_distances = sorted(new_distances, key = lambda i: i[1])[1:4]
-    #             best_new_dist = [new_sorted_distances[x][0] for x in range(len(new_sorted_distances))]
-    #             extra_seqs = []
-    #             for skipped_seq in skipped:
-    #                 if skipped_seq in best_new_dist:
-    #                     extra_seqs.append(skipped_seq)
-    #                     best_new_dist.remove(skipped_seq)
-    #             ancestor = ref_tree.common_ancestor(best_new_dist)
-    #             child_names = []
-    #             find_names(ancestor, child_names)
-    #             child_names.extend(extra_seqs)
-    #             write_to_fasta_again(child_names, seq_records, skip)
-    #             #BUILD SUBTREE
-    #             create_subtree(ancestor)
     print(avg_amount/count)
     print(avg_childs/count)
     Phylo.write(ref_tree, 'backbone_plus_Ascomycota_Leotiomycetes_Helotiales.newick', 'newick')
