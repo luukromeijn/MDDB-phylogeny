@@ -1,0 +1,1340 @@
+Traceback (most recent call last):
+  File "src/run.py", line 175, in <module>
+    run(sys.argv)
+  File "src/run.py", line 168, in run
+    build_supertree(result_dir, fasta_path, taxon_path)
+  File "src/run.py", line 113, in build_supertree
+    backbone = Backbone(representatives_tree=rep_tree, dir=result_dir)
+  File "/home/s2592800/backbone/src/Supertree.py", line 249, in __init__
+    Phylo.write(tree, dir + 'supertree/backbone.tre', 'newick')
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/_io.py", line 79, in write
+    n = getattr(supported_formats[format], "write")(trees, fp, **kwargs)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 61, in write
+    return Writer(trees).write(handle, plain=plain, **kwargs)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 263, in write
+    for treestr in self.to_strings(**kwargs):
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 311, in to_strings
+    rawtree = newickize(tree.root) + ";"
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 304, in newickize
+    return "(%s)%s" % (",".join(subtrees), label + make_info_string(clade))
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 303, in <genexpr>
+    subtrees = (newickize(sub) for sub in clade)
+  File "/usr/lib/python3/dist-packages/Bio/Phylo/NewickIO.py", line 296, in newickize
+    unquoted_label = re.match(token_dict["unquoted node label"], label)
+  File "/usr/lib/python3.8/re.py", line 191, in match
+    return _compile(pattern, flags).match(string)
+  File "/usr/lib/python3.8/re.py", line 291, in _compile
+    if isinstance(flags, RegexFlag):
+RecursionError: maximum recursion depth exceeded in __instancecheck__
