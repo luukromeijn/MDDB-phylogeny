@@ -1,6 +1,6 @@
 # MDDB-phylogeny
 BSc Project at Leiden University for generating and updating a fungal phylogenetic tree based on MDDB.
-By Casper Carton and Luuk Romeijn. The corresponding BSc thesis can be found [here](https://www.universiteitleiden.nl/en/science/computer-science). We documented our process [here](https://github.com/luukromeijn/MDDB-phylogeny/blob/main/results/notebook.md).
+By Casper Carton and Luuk Romeijn. The corresponding BSc thesis can be found [here](results/BSc_Thesis___Fungal_phylogeny.pdf). We documented our process [here](https://github.com/luukromeijn/MDDB-phylogeny/blob/main/results/notebook.md).
 
 Supervisors:
 * Dr. V. Merckx (Naturalis)
@@ -17,6 +17,7 @@ Supervisors:
     * [Alfpy](https://pypi.org/project/alfpy/)
 * Binary executables for [MAFFT](https://mafft.cbrc.jp/alignment/software/) and [RAxML](https://github.com/stamatak/standard-RAxML). 
 * UNITE [QIIME release](https://doi.org/10.15156/BIO/1264708) (dataset)
+* [6-mer Google distance matrix](https://doi.org/10.5281/zenodo.6799940) (this is a compressed version, uncompressing might take up to an hour, which is still quicker than recalculating the entire distance matrix for UNITE's data (36 hours))
 
 # Instructions
 
@@ -31,6 +32,8 @@ A UNITE backbone phylogeny can be created by calling python followed by `src/cre
 * `full_constraint` (`bool`): Constrains all taxonomic ranks in the representatives tree if set to true. Only constrains the representatives to fork if false.
 * `localpair` (`bool`): If true, forces the use of the l-INS-i MAFFT algorithm instead of the default FFT-NS-2.
 
+Note that lines 4-8 of `create_backbone.py` specifies paths to some required components that users should download before use. These components are mentioned in the requirements.
+
 Basically, `create_backbone.py` runs the entire algorithm and calls upon all the involved components. For those interested in the workings of this program, these components are listed below:
 * `Chunks.py`: For handling and creating chunks based on UNITE data.
     * `Chunk`: Contains sequence data for a phylogenetic (sub)tree.
@@ -42,7 +45,7 @@ Basically, `create_backbone.py` runs the entire algorithm and calls upon all the
     * `RepresentativesTree`: Generates/loads supertree based on chunk representatives, allows operating on this supertree.
     * `Backbone`: Generates/loads/allows operating on backbone tree based on a chunk division.
 
-Note that if you run `create_backbone.py`, a result folder will automatically be created. If you create any other script yourself, please note that all of the above mentioned components assume a `result_dir` result directory with the following structure: 
+Note that if you run `create_backbone.py`, a result folder will automatically be created. If you create any other script yourself, please be aware that all of the above mentioned components assume a `result_dir` result directory with the following structure: 
 
     .
     ├── chunks/
@@ -57,3 +60,4 @@ There exist two other scripts (mostly for reproducing the figures in the thesis)
 * `inspect_tree.py`: shows number of non-matching leaves and displays tree for inspection.
 
 ## Tree expansion
+TBA

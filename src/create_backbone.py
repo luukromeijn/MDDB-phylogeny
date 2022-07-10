@@ -1,5 +1,12 @@
 '''Creates a fungal phylogenetic backbone with data from UNITE.'''
 
+# Some global variables (paths to required files)
+unite_fasta = 'data/sh_qiime_release_10.05.2021/sh_refs_qiime_ver8_97_10.05.2021.fasta'
+unite_taxon = 'data/sh_qiime_release_10.05.2021/sh_taxonomy_qiime_ver8_97_10.05.2021.txt'
+matrix_file = 'data/pw_distances_6mergoogle.npy'
+mafft_exe = "bin/mafft"
+raxml_exe = "raxml/raxmlHPC-PTHREADS-SSE3"
+
 import os, glob, sys
 import numpy as np
 import time
@@ -179,11 +186,6 @@ def run(args: list):
         print("length_tolerance min_split_depth max_split_depth max_chunk_size outlier_strictness representatives_alg full_constraint localpair")
     else:
         # Setting variables
-        fasta_path = 'data/sh_qiime_release_10.05.2021/sh_refs_qiime_ver8_97_10.05.2021.fasta'
-        taxon_path = 'data/sh_qiime_release_10.05.2021/sh_taxonomy_qiime_ver8_97_10.05.2021.txt'
-        matrix_file_path = 'data/pw_distances_6mergoogle.npy'
-        mafft_path = "bin/mafft"
-        raxml_path = "raxml/raxmlHPC-PTHREADS-SSE3"
         length_tolerance = float(args[1])
         min_split_depth = int(args[2])
         max_split_depth = int(args[3])
@@ -214,10 +216,10 @@ def run(args: list):
         sys.stderr = open(result_dir + "errors.txt", "w")
 
         # Calling functions
-        divide_data(result_dir, fasta_path, taxon_path, matrix_file_path, mafft_path, raxml_path, length_tolerance, 
+        divide_data(result_dir, unite_fasta, unite_taxon, matrix_file, mafft_exe, raxml_exe, length_tolerance, 
         min_split_depth, max_split_depth, max_chunk_size, outlier_strictness, representatives_alg, full_constraint, localpair)
-        build_subtrees(result_dir, mafft_path, raxml_path, localpair)
-        build_supertree(result_dir, fasta_path, taxon_path)
+        build_subtrees(result_dir, mafft_exe, raxml_exe, localpair)
+        build_supertree(result_dir, unite_fasta, unite_taxon)
     
     end = time.time()
     print("Total algorithm completion time:", end-start, "seconds.")
