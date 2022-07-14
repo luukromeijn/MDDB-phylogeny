@@ -1,14 +1,38 @@
 # MDDB-phylogeny
 BSc Project at Leiden University for generating and updating a fungal phylogenetic tree based on MDDB.
-By Casper Carton and Luuk Romeijn. The corresponding BSc thesis can be found [here](results/BSc_Thesis___Fungal_phylogeny.pdf). We documented our process [here](https://github.com/luukromeijn/MDDB-phylogeny/blob/main/results/notebook.md).
+By Casper Carton and Luuk Romeijn. The corresponding BSc thesis can be found here. We documented our process [here](https://github.com/luukromeijn/MDDB-phylogeny/blob/main/results/notebook.md).
+Future users may want to do either of the following:
+1. Use the phylogenetic trees (See: Backbone generation --> Trees)
+2. Produce new backbone trees (See: Backbone generation --> Produce)
+3. Expand a backbone tree with new data (See: Backbone expansion)
 
 Supervisors:
-* Dr. V. Merckx (Naturalis)
+* Prof. F. Verbeek (LIACS)
 * Dr. R. Vos (Naturalis)
 * I. Martorelli MSc (LIACS)
-* Prof. F. Verbeek (LIACS)
+* Dr. V. Merckx (Naturalis)
 
-# Requirements
+# Backbone generation
+Data from UNITE is used to build the trees. The taxonomic annotations are used to divide the data into chunks, for which subtrees are built. These subtrees are then grafted together. The algorithm makes use of $k$-mer distancing for outlier removal and to graft the subtrees together.
+The following parameters are involved: 
+* `length_tolerance` (`float`): Allowed factor of deviation compared to the average sequence length in UNITE. Necessary since $k$-mer distancing is sensitive to length deviations. Recommendation: 0.2
+* `min_split_depth` (`int`): The data is at least split up at this taxonomy rank (1=phylum, ... , 6=species)
+* `max_split_depth` (`int`): The data will not be splitted beyond this taxonomy rank.
+* `max_chunk_size` (`int`): Size threshold for which the algorithm will split chunks further (if allowed by max_split_depth). E.g.: split chunks on order, but make an extra split to family level when they are too big. 
+* `outlier_strictness` (`float`): Number of standard deviations that a sequences average distance to its chunk must be lower than the average pairwise distance in the entire dataset. If not, this sequence will be discarded. Recommendation: 1.0
+* `representatives_alg` (`int`): Determines which function is used to determine the chunk representatives. If 0: pick sequences most average to their chunks. If 1: pick sequences most distant to each other within their chunk. Recommendation: 0
+* `full_constraint` (`bool`): Constrains all taxonomic ranks in the representatives tree if set to true. Only constrains the representatives to fork if false. Recommendation: True (1)
+* `localpair` (`bool`): If true, forces the use of the l-INS-i MAFFT algorithm instead of the default FFT-NS-2. Recommendation: True (1)
+
+As for the splitting depth, we recommend either:
+1. `min_split_depth=3`, `max_split_depth=4`, `max_chunk_size=1500`: contains inconsistencies at family level but is a smaller assumption/constraint than 2.  
+2. `min_split_depth=man_split_depth=4` (splitting on family): very big assumption/constraint, but consistent to family level. Contains more different species than 1. 
+
+## Trees
+Many different trees were generated using different parameter settings. These trees can be found in [here](results/thesis%20results/). Specifically, the backbone trees corresponding to the above recommendations can be found [here (1)](results/thesis%20results/l0.2_s3_4_1500_o2.0_a1/supertree/backbone.tre) and [here (2)](results/thesis%20results/l0.2_s4_4_0_o1.0_a0_constr_localpair/supertree/backbone.tre). Quality assessment of these trees has been done, results of which can be found in the thesis. 
+
+## Produce 
+Requirements:
 * Python 3.6+
 * Python packages:
     * Numpy
@@ -19,18 +43,7 @@ Supervisors:
 * UNITE [QIIME release](https://doi.org/10.15156/BIO/1264708) (dataset)
 * [6-mer Google distance matrix](https://doi.org/10.5281/zenodo.6799940) (this is a compressed version, uncompressing might take up to an hour, which is still quicker than recalculating the entire distance matrix for UNITE's data (36 hours))
 
-# Instructions
-
-## Tree generation
-A UNITE backbone phylogeny can be created by calling python followed by `src/create_backbone.py` and the following space-separated variables (in order):
-* `length_tolerance` (`float`): Allowed factor of deviation compared to the average sequence length in UNITE.
-* `min_split_depth` (`int`): The data is at least split up at this taxonomy rank (1=phylum, ... , 6=species)
-* `max_split_depth` (`int`): The data will not be splitted beyond this taxonomy rank.
-* `max_chunk_size` (`int`): Size threshold for which the algorithm will split chunks further (if allowed by max_split_depth).
-* `outlier_strictness` (`float`): Number of standard deviations that a sequences average distance to its chunk must be lower than the average pairwise distance in the entire dataset.
-* `representatives_alg` (`int`): Determines which function is used to determine the chunk representatives. If 0: pick sequences most average to their chunks. If 1: pick sequences most distant to each other within their chunk. 
-* `full_constraint` (`bool`): Constrains all taxonomic ranks in the representatives tree if set to true. Only constrains the representatives to fork if false.
-* `localpair` (`bool`): If true, forces the use of the l-INS-i MAFFT algorithm instead of the default FFT-NS-2.
+A UNITE backbone phylogeny can be created by calling python followed by `src/create_backbone.py` and specifying the above mentioned variables (in order).
 
 Note that lines 4-8 of `create_backbone.py` specifies paths to some required components that users should download before use. These components are mentioned in the requirements.
 
