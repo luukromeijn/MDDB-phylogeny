@@ -190,12 +190,7 @@ def update_tree():
             skipped += len(ancs[2])
         for seq in ancs[2]:
             overall_records.add(seq, unknown_records.seq_list[unknown_records.id_list.index(seq)])
-    # Phylo.write(ref_tree, 'representatives_expansion.tre', 'newick')
-    # Phylo.draw(ref_tree)
-    # print("skipped", skipped)
-    # print("childs", avg_childs/len(sorted_paths))
-    # print("best_dist length", avg_dist/100)
-    # print("average worst distances", avg_worst_dist/100)
-    # print("average smallest dist", avg_smallest_dist/100)
+    Phylo.write(ref_tree, 'expanded_backbone.tre', 'newick')
+    Phylo.draw(ref_tree)
 
 update_tree()
